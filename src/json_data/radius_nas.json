@@ -1,0 +1,4 @@
+[
+  { "id": 1, "nasname": "10.0.0.1", "shortname": "edge-1", "type": "cisco", "description": "Edge router" },
+  { "id": 2, "nasname": "10.0.0.2", "shortname": "edge-2", "type": "mikrotik", "description": "Branch router" }
+]

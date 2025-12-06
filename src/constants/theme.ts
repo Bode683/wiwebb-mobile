@@ -4,57 +4,60 @@
 
 import { Platform } from "react-native";
 
-const tintColorLight = "#0a7ea4";
-const tintColorDark = "#38bdf8";
+// Wiwebb Brand Colors
+// Primary: oklch(57% 0.22 250) ≈ #4d3ddb (purple-blue)
+// Secondary: oklch(60% 0.15 50) ≈ #db9f4d (orange-yellow)
+const tintColorLight = "#4d3ddb";
+const tintColorDark = "#6d5df5";
 
 export const Colors = {
   light: {
-    text: "#11181C",
-    background: "#fff",
+    text: "#374151", // Darker text for better readability
+    background: "#ffffff",
     tint: tintColorLight,
     icon: "#687076",
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
-    primary: "#0a7ea4",
-    secondary: "#6b7280",
+    primary: "#4d3ddb", // Wiwebb purple-blue
+    secondary: "#db9f4d", // Wiwebb orange-yellow
     success: "#10b981",
     warning: "#f59e0b",
     error: "#ef4444",
     muted: "#f3f4f6",
     card: "#ffffff",
-    border: "#e5e7eb",
+    border: "#d1d5db", // Updated border color
     input: "#f9fafb",
     overlay: "rgba(0,0,0,0.4)",
     skeleton: "#e5e7eb",
     textMuted: "#6b7280",
     backgroundElevated: "#f9fafb",
     surface: "#f9fafb",
-    accent: "#0a7ea4",
+    accent: "#f0ab5c", // Lighter accent based on secondary
     onPrimary: "#ffffff",
   },
   dark: {
     text: "#ECEDEE",
-    background: "#151718",
+    background: "#0f172a", // Darker background
     tint: tintColorDark,
     icon: "#9BA1A6",
     tabIconDefault: "#9BA1A6",
     tabIconSelected: tintColorDark,
-    primary: "#38bdf8",
-    secondary: "#94a3b8",
+    primary: "#6d5df5", // Lighter purple for dark mode
+    secondary: "#f0ab5c", // Lighter orange for dark mode
     success: "#22c55e",
-    warning: "#f59e0b",
+    warning: "#fbbf24",
     error: "#f87171",
-    muted: "#1f2937",
-    card: "#111827",
-    border: "#374151",
-    input: "#111827",
-    overlay: "rgba(0,0,0,0.6)",
-    skeleton: "#374151",
-    textMuted: "#9ca3af",
-    backgroundElevated: "#0b0f10",
-    surface: "#0b0f10",
-    accent: "#38bdf8",
-    onPrimary: "#000000",
+    muted: "#1e293b",
+    card: "#1e293b",
+    border: "#334155",
+    input: "#1e293b",
+    overlay: "rgba(0,0,0,0.7)",
+    skeleton: "#334155",
+    textMuted: "#94a3b8",
+    backgroundElevated: "#0b1120",
+    surface: "#1e293b",
+    accent: "#db9f4d",
+    onPrimary: "#ffffff",
   },
 } as const;
 

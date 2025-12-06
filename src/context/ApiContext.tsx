@@ -1,36 +1,39 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { SupabaseClient, Session, AuthChangeEvent } from '@supabase/supabase-js';
 import { AxiosInstance } from 'axios';
-import { getSupabase } from '@/lib/supabase';
 import httpClient from '@/lib/httpClient';
+import { authStorage } from '@/lib/authStorage';
 import { queryClient, clearAllQueries } from '@/lib/queryClient';
-import { authApi } from '@/api/auth.api';
-import { profilesApi } from '@/api/profiles.api';
-import { tripsApi } from '@/api/trips.api';
+import { djangoAuthApi } from '@/api/django-auth.api';
+import { usersApi } from '@/api/users.api';
+import { tenantsApi } from '@/api/tenants.api';
+import { hotspotsApi } from '@/api/hotspots.api';
+import { radiusApi } from '@/api/radius.api';
+import { subscriptionsApi } from '@/api/subscriptions.api';
+import { paymentsApi } from '@/api/payments.api';
 import type { User } from '@/api/types';
 
 /**
  * API Context Value
- * 
+ *
  * Architecture Decision: Auth State Management
  * ==========================================
- * 
+ *
  * CONTEXT manages:
- * - Current session (from Supabase auth listener)
- * - Current user (derived from session)
+ * - Current user (from Django authentication)
+ * - Auth token (stored in AsyncStorage)
  * - Auth loading state
- * - API client instances (supabase, http)
+ * - API client instances (http)
  * - API module references
- * 
+ *
  * TANSTACK QUERY manages:
- * - Data fetching (profiles, trips, etc.)
+ * - Data fetching (hotspots, radius users, subscriptions, etc.)
  * - Caching and invalidation
  * - Loading/error states for data operations
  * - Mutations (create, update, delete)
- * 
+ *
  * Why this split?
- * - Auth state is global, singleton, and event-driven (Supabase listener)
+ * - Auth state is global, singleton, and persisted
  * - Data is request-driven, cacheable, and can be stale
  * - Context provides stable references; Query handles data lifecycle
  * - Avoids prop drilling while keeping data fetching declarative
@@ -38,22 +41,24 @@ import type { User } from '@/api/types';
 
 interface ApiContextValue {
   // Client instances
-  supabase: SupabaseClient;
   http: AxiosInstance;
-  
+
   // API modules
   api: {
-    auth: typeof authApi;
-    profiles: typeof profilesApi;
-    trips: typeof tripsApi;
+    auth: typeof djangoAuthApi;
+    users: typeof usersApi;
+    tenants: typeof tenantsApi;
+    hotspots: typeof hotspotsApi;
+    radius: typeof radiusApi;
+    subscriptions: typeof subscriptionsApi;
+    payments: typeof paymentsApi;
   };
-  
+
   // Auth state (managed by context)
-  session: Session | null;
   user: User | null;
   isAuthenticated: boolean;
   isAuthLoading: boolean;
-  
+
   // Auth helpers
   refreshAuth: () => Promise<void>;
 }
@@ -66,86 +71,109 @@ interface ApiProviderProps {
 
 /**
  * API Provider Component
- * 
+ *
  * Responsibilities:
- * 1. Initialize Supabase and HTTP clients
- * 2. Listen to auth state changes
+ * 1. Initialize HTTP client
+ * 2. Load user from storage on mount
  * 3. Provide API surface via context
  * 4. Wrap with QueryClientProvider for TanStack Query
  * 5. Clear query cache on logout
  */
 export function ApiProvider({ children }: ApiProviderProps) {
-  const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  
-  const supabase = getSupabase();
 
   /**
-   * Initialize auth state
+   * Initialize auth state from storage
    */
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user as User | null);
-      setIsAuthLoading(false);
-    });
+    const initAuth = async () => {
+      try {
+        // Check if we have a stored token
+        const token = await authStorage.getAuthToken();
 
-    // Listen to auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(
-      async (event: AuthChangeEvent, session: Session | null) => {
-        if (__DEV__) {
-          console.log('Auth state changed:', event, session?.user?.email);
+        if (token) {
+          // Try to fetch current user from backend
+          try {
+            const currentUser = await djangoAuthApi.getCurrentUser(httpClient);
+            setUser(currentUser);
+          } catch (error) {
+            // Token is invalid, clear storage
+            console.warn('Stored token is invalid, clearing auth data');
+            await authStorage.clearAll();
+            setUser(null);
+          }
+        } else {
+          // No stored token, check for stored user data (offline mode)
+          const storedUser = await authStorage.getUserData();
+          if (storedUser) {
+            setUser(storedUser);
+          }
         }
-
-        setSession(session);
-        setUser(session?.user as User | null);
-
-        // Clear all queries on sign out
-        if (event === 'SIGNED_OUT') {
-          clearAllQueries();
-        }
-
-        // Invalidate queries on sign in
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          // Optionally refetch user-specific data
-          // queryClient.invalidateQueries({ queryKey: ['profiles'] });
-        }
+      } catch (error) {
+        console.error('Failed to initialize auth:', error);
+      } finally {
+        setIsAuthLoading(false);
       }
-    );
-
-    return () => {
-      subscription.unsubscribe();
     };
-  }, [supabase]);
+
+    initAuth();
+  }, []);
 
   /**
-   * Manually refresh auth state
+   * Manually refresh auth state from backend
    */
   const refreshAuth = useCallback(async () => {
     try {
-      const { data: { session } } = await supabase.auth.refreshSession();
-      setSession(session);
-      setUser(session?.user as User | null);
+      const currentUser = await djangoAuthApi.getCurrentUser(httpClient);
+      setUser(currentUser);
     } catch (error) {
       console.error('Failed to refresh auth:', error);
+      // Clear auth data if refresh fails
+      await authStorage.clearAll();
+      setUser(null);
     }
-  }, [supabase]);
+  }, []);
+
+  /**
+   * Listen for manual auth updates (from login/logout)
+   */
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const token = await authStorage.getAuthToken();
+      const storedUser = await authStorage.getUserData();
+
+      // If token was removed, clear user
+      if (!token && user) {
+        setUser(null);
+        clearAllQueries();
+      }
+
+      // If user was updated in storage, update state
+      if (storedUser && JSON.stringify(storedUser) !== JSON.stringify(user)) {
+        setUser(storedUser);
+      }
+    };
+
+    // Check auth status periodically
+    const interval = setInterval(checkAuthStatus, 5000);
+
+    return () => clearInterval(interval);
+  }, [user]);
 
   const value: ApiContextValue = {
-    supabase,
     http: httpClient,
     api: {
-      auth: authApi,
-      profiles: profilesApi,
-      trips: tripsApi,
+      auth: djangoAuthApi,
+      users: usersApi,
+      tenants: tenantsApi,
+      hotspots: hotspotsApi,
+      radius: radiusApi,
+      subscriptions: subscriptionsApi,
+      payments: paymentsApi,
     },
-    session,
     user,
-    isAuthenticated: !!session,
+    isAuthenticated: !!user,
     isAuthLoading,
     refreshAuth,
   };
@@ -178,10 +206,9 @@ export function useApi() {
  * Convenience hook for components that only need auth info
  */
 export function useAuthState() {
-  const { session, user, isAuthenticated, isAuthLoading, refreshAuth } = useApi();
-  
+  const { user, isAuthenticated, isAuthLoading, refreshAuth } = useApi();
+
   return {
-    session,
     user,
     isAuthenticated,
     isAuthLoading,
@@ -194,10 +221,9 @@ export function useAuthState() {
  * Convenience hook for components that need to make API calls
  */
 export function useApiClients() {
-  const { supabase, http, api } = useApi();
-  
+  const { http, api } = useApi();
+
   return {
-    supabase,
     http,
     api,
   };

@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Avatar from "@/features/profile/components/Avatar";
 import { useTheme } from "@/hooks/use-theme";
 import { useRouter } from "expo-router";
@@ -76,8 +76,8 @@ export function DrawerProfileSection({
               {userPhone || userEmail || "Guest User"}
             </ThemedText>
             {(userPhone || userEmail) && (
-              <IconSymbol
-                name="checkmark.circle.fill"
+              <MaterialCommunityIcons
+                name="check-circle"
                 size={18}
                 color={theme.colors.success}
                 style={styles.verifiedIcon}

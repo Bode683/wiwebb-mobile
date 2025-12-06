@@ -1,0 +1,4 @@
+[
+  { "id": 1, "username": "alice", "attribute": "Cleartext-Password" },
+  { "id": 2, "username": "bob", "attribute": "Cleartext-Password" }
+]

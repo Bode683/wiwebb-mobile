@@ -1,7 +1,7 @@
 import { DrawerMenuItem } from "@/components/DrawerMenuItem";
 import { DrawerProfileSection } from "@/components/DrawerProfileSection";
 import { ThemedText } from "@/components/themed-text";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "expo-router";
@@ -136,8 +136,8 @@ export function Drawer({
               style={styles.closeButton}
               accessibilityLabel="Close menu"
             >
-              <IconSymbol
-                name="arrow.left"
+              <MaterialCommunityIcons
+                name="arrow-left"
                 size={24}
                 color={theme.colors.text}
               />
@@ -156,59 +156,64 @@ export function Drawer({
               onClose={onClose}
             />
 
-            {/* Menu Items - Top Section */}
+            {/* WiFi Network Management */}
             <View style={[styles.menuSection, { marginTop: theme.spacing.md }]}>
+              <ThemedText style={[styles.sectionTitle, { paddingHorizontal: theme.spacing.lg, marginBottom: theme.spacing.xs, opacity: 0.6 }]}>
+                Network
+              </ThemedText>
               <DrawerMenuItem
-                icon="creditcard"
-                title="Payment methods"
-                subtitle="Orange Money"
-                onPress={() => handleNavigation("/(drawer)/payment-methods")}
+                icon="wifi"
+                title="Hotspots"
+                subtitle="Manage WiFi access points"
+                onPress={() => handleNavigation("/(drawer)/hotspots")}
               />
-              {/* TODO: Create discounts route file before enabling this */}
-              {/* <DrawerMenuItem
-                icon="tag"
-                title="Discounts and gifts"
-                subtitle="Enter promo code"
-                onPress={() => handleNavigation("/(drawer)/discounts")}
-              /> */}
+              <DrawerMenuItem
+                icon="person.2"
+                title="RADIUS Users"
+                subtitle="WiFi user accounts"
+                onPress={() => handleNavigation("/(drawer)/radius/users")}
+              />
+              <DrawerMenuItem
+                icon="chart.bar"
+                title="Active Sessions"
+                subtitle="Connected devices"
+                onPress={() => handleNavigation("/(drawer)/radius/sessions")}
+              />
             </View>
 
-            {/* Menu Items - Middle Section */}
+            {/* Billing & Subscriptions */}
             <View style={[styles.menuSection, { marginTop: theme.spacing.sm }]}>
+              <ThemedText style={[styles.sectionTitle, { paddingHorizontal: theme.spacing.lg, marginBottom: theme.spacing.xs, opacity: 0.6 }]}>
+                Billing
+              </ThemedText>
               <DrawerMenuItem
-                icon="clock"
-                title="History"
-                onPress={() => handleNavigation("/(drawer)/history")}
+                icon="star"
+                title="Subscription Plans"
+                subtitle="View available plans"
+                onPress={() => handleNavigation("/(drawer)/subscriptions/plans")}
               />
               <DrawerMenuItem
-                icon="mappin"
-                title="My addresses"
-                onPress={() => handleNavigation("/(drawer)/addresses")}
+                icon="creditcard"
+                title="Payment Methods"
+                subtitle="Manage payment options"
+                onPress={() => handleNavigation("/(drawer)/payment-methods")}
+              />
+            </View>
+
+            {/* Account & Settings */}
+            <View style={[styles.menuSection, { marginTop: theme.spacing.sm }]}>
+              <ThemedText style={[styles.sectionTitle, { paddingHorizontal: theme.spacing.lg, marginBottom: theme.spacing.xs, opacity: 0.6 }]}>
+                Account
+              </ThemedText>
+              <DrawerMenuItem
+                icon="person"
+                title="Profile"
+                onPress={() => handleNavigation("/(drawer)/profile")}
               />
               <DrawerMenuItem
                 icon="headphones"
                 title="Support"
                 onPress={() => handleNavigation("/(drawer)/support")}
-              />
-            </View>
-
-            {/* Highlighted Driver Section */}
-            {/* TODO: Create driver route file before enabling this */}
-            {/* <View style={[styles.menuSection, { marginTop: theme.spacing.sm }]}>
-              <DrawerMenuItem
-                icon="car"
-                title="Earn as a driver"
-                variant="highlighted"
-                onPress={() => handleNavigation("/(drawer)/driver")}
-              />
-            </View> */}
-
-            {/* Menu Items - Bottom Section */}
-            <View style={[styles.menuSection, { marginTop: theme.spacing.sm }]}>
-              <DrawerMenuItem
-                icon="shield"
-                title="Safety"
-                onPress={() => handleNavigation("/(drawer)/safety")}
               />
               <DrawerMenuItem
                 icon="gearshape"
@@ -245,8 +250,8 @@ export function Drawer({
                 ]}
                 onPress={handleSignOut}
               >
-                <IconSymbol
-                  name="rectangle.portrait.and.arrow.right"
+                <MaterialCommunityIcons
+                  name="logout"
                   size={24}
                   color={theme.colors.error}
                 />
@@ -290,6 +295,12 @@ const styles = StyleSheet.create({
   },
   menuSection: {
     gap: 0,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
   signOutSection: {
     // Sign out section styling

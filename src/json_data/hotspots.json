@@ -1,0 +1,54 @@
+[
+  {
+    "id": 101,
+    "name": "Lobby AP",
+    "tenantId": 1,
+    "tenantName": "Acme Corp",
+    "status": "Online",
+    "clients": 24,
+    "bandwidth": "120 Mbps",
+    "uptime": "99.9%",
+    "macAddress": "00:1A:2B:3C:4D:5E",
+    "bandwidthLimit": 200,
+    "securityType": "WPA2"
+  },
+  {
+    "id": 102,
+    "name": "Conference Room AP",
+    "tenantId": 1,
+    "tenantName": "Acme Corp",
+    "status": "Offline",
+    "clients": 0,
+    "bandwidth": "0 Mbps",
+    "uptime": "0%",
+    "macAddress": "00:1A:2B:3C:4D:5F",
+    "bandwidthLimit": 200,
+    "securityType": "Captive Portal"
+  },
+  {
+    "id": 201,
+    "name": "Warehouse AP",
+    "tenantId": 2,
+    "tenantName": "Globex Inc",
+    "status": "Online",
+    "clients": 12,
+    "bandwidth": "85 Mbps",
+    "uptime": "98.4%",
+    "macAddress": "00:1A:2B:3C:4D:6A",
+    "bandwidthLimit": 150,
+    "securityType": "WPA3"
+  },
+  {
+    "id": 202,
+    "name": "Office AP",
+    "tenantId": 2,
+    "tenantName": "Globex Inc",
+    "status": "Online",
+    "clients": 33,
+    "bandwidth": "160 Mbps",
+    "uptime": "99.2%",
+    "macAddress": "00:1A:2B:3C:4D:6B",
+    "bandwidthLimit": 250,
+    "securityType": "WPA2"
+  }
+]

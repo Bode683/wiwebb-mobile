@@ -7,6 +7,16 @@ export * from './errors';
 export * from './types';
 export * from './schemas';
 export * from './queryKeys';
-export { authApi } from './auth.api';
-export { profilesApi } from './profiles.api';
-export { tripsApi } from './trips.api';
+
+// Django Auth
+export { djangoAuthApi } from './django-auth.api';
+
+// User Management (Admin)
+export { usersApi } from './users.api';
+
+// Wiwebb API Modules
+export { tenantsApi } from './tenants.api';
+export { hotspotsApi } from './hotspots.api';
+export { radiusApi } from './radius.api';
+export { subscriptionsApi } from './subscriptions.api';
+export { paymentsApi } from './payments.api';
