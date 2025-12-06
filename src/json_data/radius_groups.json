@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "groupname": "default",
+    "attribute": "Session-Timeout",
+    "op": ":=",
+    "value": "3600"
+  },
+  {
+    "id": 2,
+    "groupname": "default",
+    "attribute": "Idle-Timeout",
+    "op": ":=",
+    "value": "600"
+  },
+  {
+    "id": 3,
+    "groupname": "premium",
+    "attribute": "Session-Timeout",
+    "op": ":=",
+    "value": "14400"
+  },
+  {
+    "id": 4,
+    "groupname": "premium",
+    "attribute": "Idle-Timeout",
+    "op": ":=",
+    "value": "1800"
+  },
+  {
+    "id": 5,
+    "groupname": "guest",
+    "attribute": "Session-Timeout",
+    "op": ":=",
+    "value": "1800"
+  },
+  {
+    "id": 6,
+    "groupname": "guest",
+    "attribute": "Idle-Timeout",
+    "op": ":=",
+    "value": "300"
+  }
+]

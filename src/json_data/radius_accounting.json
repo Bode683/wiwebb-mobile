@@ -1,20 +1,52 @@
 [
   {
-    "radacctid": 1001,
-    "username": "alice",
-    "acctsessionid": "S-AL-001",
-    "acctstarttime": "2025-08-20T09:00:00Z",
+    "radacctid": 101,
+    "username": "testuser",
+    "acctsessionid": "session-hist-001",
+    "acctstarttime": "2024-12-05T09:00:00Z",
+    "acctstoptime": "2024-12-05T10:30:00Z",
     "acctsessiontime": 5400,
     "acctinputoctets": 104857600,
     "acctoutputoctets": 52428800
   },
   {
-    "radacctid": 1002,
-    "username": "bob",
-    "acctsessionid": "S-BO-002",
-    "acctstarttime": "2025-08-20T10:30:00Z",
+    "radacctid": 102,
+    "username": "guest123",
+    "acctsessionid": "session-hist-002",
+    "acctstarttime": "2024-12-05T10:30:00Z",
+    "acctstoptime": "2024-12-05T11:00:00Z",
     "acctsessiontime": 1800,
     "acctinputoctets": 26214400,
     "acctoutputoctets": 15728640
+  },
+  {
+    "radacctid": 103,
+    "username": "premiumuser",
+    "acctsessionid": "session-hist-003",
+    "acctstarttime": "2024-12-05T14:00:00Z",
+    "acctstoptime": "2024-12-05T18:00:00Z",
+    "acctsessiontime": 14400,
+    "acctinputoctets": 314572800,
+    "acctoutputoctets": 209715200
+  },
+  {
+    "radacctid": 104,
+    "username": "subscriber001",
+    "acctsessionid": "session-hist-004",
+    "acctstarttime": "2024-12-04T08:00:00Z",
+    "acctstoptime": "2024-12-04T09:30:00Z",
+    "acctsessiontime": 5400,
+    "acctinputoctets": 157286400,
+    "acctoutputoctets": 104857600
+  },
+  {
+    "radacctid": 105,
+    "username": "testuser",
+    "acctsessionid": "session-hist-005",
+    "acctstarttime": "2024-12-04T15:00:00Z",
+    "acctstoptime": "2024-12-04T16:00:00Z",
+    "acctsessiontime": 3600,
+    "acctinputoctets": 78643200,
+    "acctoutputoctets": 52428800
   }
 ]

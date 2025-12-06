@@ -2,6 +2,7 @@ import { AxiosInstance } from 'axios';
 import { normalizeAxiosError, normalizeZodError } from './errors';
 import * as schemas from './schemas';
 import type { Tenant, DashboardStats } from './types';
+import { mockDataStore, isMockMode } from '../lib/mockDataStore';
 
 /**
  * Tenant Management API module
@@ -15,6 +16,11 @@ export const tenantsApi = {
    */
   async listTenants(http: AxiosInstance): Promise<Tenant[]> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.listTenants();
+        return data.map(tenant => schemas.tenantSchema.parse(tenant));
+      }
+
       const { data } = await http.get<Tenant[]>('/tenants/');
       return data.map(tenant => schemas.tenantSchema.parse(tenant));
     } catch (error: any) {
@@ -31,6 +37,12 @@ export const tenantsApi = {
    */
   async getTenant(http: AxiosInstance, id: number): Promise<Tenant> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.getTenant(id);
+        if (!data) throw new Error('Tenant not found');
+        return schemas.tenantSchema.parse(data);
+      }
+
       const { data } = await http.get<Tenant>(`/tenants/${id}/`);
       return schemas.tenantSchema.parse(data);
     } catch (error: any) {
@@ -47,6 +59,12 @@ export const tenantsApi = {
    */
   async getMyTenant(http: AxiosInstance): Promise<Tenant> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.getCurrentTenant();
+        if (!data) throw new Error('Tenant not found');
+        return schemas.tenantSchema.parse(data);
+      }
+
       const { data } = await http.get<Tenant>('/tenants/me/');
       return schemas.tenantSchema.parse(data);
     } catch (error: any) {
@@ -66,6 +84,15 @@ export const tenantsApi = {
     request: { name: string; description?: string; email?: string }
   ): Promise<Tenant> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.createTenant({
+          ...request,
+          slug: request.name.toLowerCase().replace(/\s+/g, '-'),
+          is_active: true,
+        });
+        return schemas.tenantSchema.parse(data);
+      }
+
       const { data } = await http.post<Tenant>('/tenants/', request);
       return schemas.tenantSchema.parse(data);
     } catch (error: any) {
@@ -86,6 +113,12 @@ export const tenantsApi = {
     updates: Partial<{ name: string; description?: string; email?: string }>
   ): Promise<Tenant> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.updateTenant(id, updates);
+        if (!data) throw new Error('Tenant not found');
+        return schemas.tenantSchema.parse(data);
+      }
+
       const { data } = await http.put<Tenant>(`/tenants/${id}/`, updates);
       return schemas.tenantSchema.parse(data);
     } catch (error: any) {
@@ -102,6 +135,12 @@ export const tenantsApi = {
    */
   async deleteTenant(http: AxiosInstance, id: number): Promise<void> {
     try {
+      if (isMockMode()) {
+        const success = await mockDataStore.deleteTenant(id);
+        if (!success) throw new Error('Tenant not found');
+        return;
+      }
+
       await http.delete(`/tenants/${id}/`);
     } catch (error: any) {
       throw normalizeAxiosError(error);
@@ -114,6 +153,11 @@ export const tenantsApi = {
    */
   async getDashboardStats(http: AxiosInstance): Promise<DashboardStats> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.getDashboardStats();
+        return schemas.dashboardStatsSchema.parse(data);
+      }
+
       const { data } = await http.get<DashboardStats>('/dashboard/stats/');
       return schemas.dashboardStatsSchema.parse(data);
     } catch (error: any) {
