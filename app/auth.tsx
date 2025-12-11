@@ -40,7 +40,9 @@ export default function AuthScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [showResetPassword, setShowResetPassword] = useState(false);
 
@@ -58,7 +60,7 @@ export default function AuthScreen() {
   const isLoading = isSigningIn || isSigningUp || isResettingPassword;
   const passwordsMatch = password === confirmPassword;
   const isValidSignUp =
-    email && password && confirmPassword && passwordsMatch && fullName;
+    email && password && confirmPassword && passwordsMatch && username && firstName && lastName;
 
   async function handleSignIn() {
     try {
@@ -77,22 +79,17 @@ export default function AuthScreen() {
 
     try {
       await signUp({
+        username,
         email,
         password,
-        options: {
-          data: {
-            full_name: fullName,
-            phone: phone || undefined,
-          },
-        },
+        first_name: firstName,
+        last_name: lastName,
       });
-      showToast(
-        "success",
-        "Account created! Please check your email to verify your account."
-      );
+      // Success toast is handled by useAuth hook
       setActiveTab("signin");
     } catch (error) {
-      showToast("error", "Sign Up Failed", getUserFriendlyMessage(error));
+      // Error toast is handled by useAuth hook
+      console.error('Sign up error:', error);
     }
   }
 
@@ -205,19 +202,32 @@ export default function AuthScreen() {
                       disabled={isLoading}
                       error={!!(signInError || signUpError)}
                     />
-                    <HelperText type="info" visible={activeTab === "signup"}>
-                      Password must be at least 6 characters
-                    </HelperText>
+                    {activeTab === "signup" && (
+                      <HelperText type="info" visible={true}>
+                        Password must be at least 8 characters
+                      </HelperText>
+                    )}
                   </View>
+
+                  {/* Sign In Additional Options */}
+                  {activeTab === "signin" && (
+                    <View style={styles.helperContainer}>
+                      <HelperText type="info" visible={true}>
+                        You can sign in with your email or username
+                      </HelperText>
+                    </View>
+                  )}
 
                   {/* Sign Up Additional Fields */}
                   {activeTab === "signup" && (
                     <>
+
+                      {/* Confirm Password Field */}
                       <View style={styles.inputField}>
                         <TextInput
                           label="Confirm Password"
                           mode="outlined"
-                          left={<TextInput.Icon icon="lock" />}
+                          left={<TextInput.Icon icon="lock-check" />}
                           onChangeText={setConfirmPassword}
                           value={confirmPassword}
                           secureTextEntry={true}
@@ -233,28 +243,57 @@ export default function AuthScreen() {
                         )}
                       </View>
 
+                      {/* Username Field */}
                       <View style={styles.inputField}>
                         <TextInput
-                          label="Full Name"
+                          label="Username"
+                          mode="outlined"
+                          left={<TextInput.Icon icon="account-circle" />}
+                          onChangeText={setUsername}
+                          value={username}
+                          placeholder="johndoe"
+                          autoCapitalize="none"
+                          disabled={isLoading}
+                          error={!!signUpError}
+                        />
+                        <HelperText type="info" visible={true}>
+                          Choose a unique username (min 3 characters)
+                        </HelperText>
+                      </View>
+
+                      {/* Divider before Personal Info */}
+                      <View style={styles.sectionDivider} />
+
+                      {/* Personal Information Section Header */}
+                      <ThemedText style={styles.sectionTitle}>
+                        Personal Information
+                      </ThemedText>
+
+                      <View style={styles.inputField}>
+                        <TextInput
+                          label="First Name"
                           mode="outlined"
                           left={<TextInput.Icon icon="account" />}
-                          onChangeText={setFullName}
-                          value={fullName}
-                          placeholder="John Doe"
+                          onChangeText={setFirstName}
+                          value={firstName}
+                          placeholder="John"
+                          autoCapitalize="words"
                           disabled={isLoading}
+                          error={!!signUpError}
                         />
                       </View>
 
                       <View style={styles.inputField}>
                         <TextInput
-                          label="Phone Number (Optional)"
+                          label="Last Name"
                           mode="outlined"
-                          left={<TextInput.Icon icon="phone" />}
-                          onChangeText={setPhone}
-                          value={phone}
-                          placeholder="+1 (123) 456-7890"
-                          keyboardType="phone-pad"
+                          left={<TextInput.Icon icon="account" />}
+                          onChangeText={setLastName}
+                          value={lastName}
+                          placeholder="Doe"
+                          autoCapitalize="words"
                           disabled={isLoading}
+                          error={!!signUpError}
                         />
                       </View>
                     </>
@@ -497,5 +536,19 @@ const styles = StyleSheet.create({
   termsLink: {
     fontWeight: "bold",
     textDecorationLine: "underline",
+  },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 8,
+    opacity: 0.7,
+  },
+  sectionDivider: {
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  helperContainer: {
+    marginTop: -8,
+    marginBottom: 8,
   },
 });

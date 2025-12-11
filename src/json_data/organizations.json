@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Acme Corp",
+    "contactName": "Jane Doe",
+    "contactEmail": "jane@acme.com",
+    "domain": "acme.com",
+    "isActive": true,
+    "createdAt": "2024-09-01T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Globex Inc",
+    "contactName": "John Smith",
+    "contactEmail": "john@globex.com",
+    "domain": "globex.com",
+    "isActive": false,
+    "createdAt": "2024-08-15T09:30:00Z"
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "radacctid": 1,
+    "acctsessionid": "session-001",
+    "username": "testuser",
+    "nasipaddress": "192.168.1.1",
+    "acctstarttime": "2024-12-06T07:30:00Z",
+    "acctstoptime": null,
+    "acctsessiontime": 1800,
+    "acctinputoctets": 52428800,
+    "acctoutputoctets": 26214400
+  },
+  {
+    "radacctid": 2,
+    "acctsessionid": "session-002",
+    "username": "guest123",
+    "nasipaddress": "192.168.1.2",
+    "acctstarttime": "2024-12-06T06:45:00Z",
+    "acctstoptime": null,
+    "acctsessiontime": 4500,
+    "acctinputoctets": 104857600,
+    "acctoutputoctets": 78643200
+  },
+  {
+    "radacctid": 3,
+    "acctsessionid": "session-003",
+    "username": "premiumuser",
+    "nasipaddress": "192.168.1.1",
+    "acctstarttime": "2024-12-06T05:15:00Z",
+    "acctstoptime": null,
+    "acctsessiontime": 10800,
+    "acctinputoctets": 209715200,
+    "acctoutputoctets": 157286400
+  }
+]

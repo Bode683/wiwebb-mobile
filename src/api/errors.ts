@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { AxiosError } from 'axios';
-import { PostgrestError, AuthError } from '@supabase/supabase-js';
 
 /**
  * Standardized API error class
@@ -42,19 +41,6 @@ export class ApiError extends Error {
 }
 
 /**
- * Normalize Supabase Postgrest errors
- */
-export function normalizeSupabaseError(error: PostgrestError | AuthError | any): ApiError {
-  return new ApiError(error.message || 'Supabase operation failed', {
-    code: error.code || error.error_code,
-    status: error.status,
-    details: error.details || error.hint,
-    cause: error,
-    isNetworkError: false,
-  });
-}
-
-/**
  * Normalize axios HTTP errors with proper network detection
  */
 export function normalizeAxiosError(error: AxiosError | any): ApiError {
@@ -70,16 +56,41 @@ export function normalizeAxiosError(error: AxiosError | any): ApiError {
   // HTTP error (response received with error status)
   if (error.response) {
     const data = error.response.data;
-    return new ApiError(
-      data?.message || data?.error || error.message || 'Request failed',
-      {
-        status: error.response.status,
-        code: data?.code || error.code,
-        details: data,
-        cause: error,
-        isNetworkError: false,
+
+    // Extract error message from various Django REST Framework formats
+    let message = 'Request failed';
+
+    if (data?.detail) {
+      // Django REST Framework uses 'detail' for error messages
+      message = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+    } else if (data?.message) {
+      message = data.message;
+    } else if (data?.error) {
+      message = data.error;
+    } else if (data?.non_field_errors && Array.isArray(data.non_field_errors)) {
+      // Django validation errors often use non_field_errors
+      message = data.non_field_errors.join(', ');
+    } else if (typeof data === 'object' && Object.keys(data).length > 0) {
+      // For field-specific validation errors, extract first error
+      const firstKey = Object.keys(data)[0];
+      const firstError = data[firstKey];
+      if (Array.isArray(firstError)) {
+        message = `${firstKey}: ${firstError[0]}`;
+      } else {
+        message = `${firstKey}: ${firstError}`;
       }
-    );
+    } else if (error.message) {
+      message = error.message;
+    }
+
+    return new ApiError(message, {
+      status: error.response.status,
+      code: data?.code || error.code,
+      details: data,
+      cause: error,
+      isNetworkError: false,
+      isValidationError: error.response.status === 400,
+    });
   }
 
   // Fallback for unknown errors

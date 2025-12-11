@@ -1,0 +1,22 @@
+[
+  {
+    "variant": "stripe",
+    "name": "Stripe",
+    "description": "Credit card payments via Stripe"
+  },
+  {
+    "variant": "paypal",
+    "name": "PayPal",
+    "description": "PayPal payments"
+  },
+  {
+    "variant": "flutterwave",
+    "name": "Flutterwave",
+    "description": "African payment methods via Flutterwave"
+  },
+  {
+    "variant": "paystack",
+    "name": "Paystack",
+    "description": "Nigerian payment gateway"
+  }
+]
