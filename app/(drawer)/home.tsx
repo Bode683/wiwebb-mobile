@@ -117,7 +117,7 @@ export default function DashboardScreen() {
           </Text>
           {user?.tenant && (
             <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-              Tenant ID: <Text style={{ fontWeight: 'bold' }}>{user.tenant}</Text>
+              Tenant: <Text style={{ fontWeight: 'bold' }}>{user.tenant.name}</Text>
             </Text>
           )}
         </View>

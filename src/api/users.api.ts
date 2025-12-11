@@ -11,6 +11,7 @@ import type {
   PaginatedResponse,
   ListOptions,
 } from './types';
+import { mockDataStore, isMockMode } from '../lib/mockDataStore';
 
 /**
  * Django User Management API module
@@ -28,6 +29,21 @@ export const usersApi = {
     options?: ListOptions
   ): Promise<PaginatedResponse<User>> {
     try {
+      if (isMockMode()) {
+        const page = options?.page || 1;
+        const pageSize = options?.pageSize || 20;
+        const response = await mockDataStore.listUsers(page, pageSize);
+        const users = response.results.map((user: any) => schemas.userSchema.parse(user));
+
+        return {
+          data: users,
+          total: response.count,
+          page,
+          pageSize,
+          hasMore: page * pageSize < response.count,
+        };
+      }
+
       const params: any = {};
 
       if (options?.page) params.page = options.page;
@@ -70,6 +86,11 @@ export const usersApi = {
       // Validate input
       const validated = schemas.createUserSchema.parse(userData);
 
+      if (isMockMode()) {
+        const data = await mockDataStore.createUser(validated);
+        return schemas.userSchema.parse(data);
+      }
+
       const { data } = await http.post<User>('/users/', validated);
 
       // Validate response
@@ -92,6 +113,12 @@ export const usersApi = {
     userId: number
   ): Promise<User> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.getUser(userId);
+        if (!data) throw new Error('User not found');
+        return schemas.userSchema.parse(data);
+      }
+
       const { data } = await http.get<User>(`/users/${userId}/`);
 
       // Validate response
@@ -117,6 +144,12 @@ export const usersApi = {
     try {
       // Validate input (partial validation)
       const validated = schemas.updateUserSchema.parse(updates);
+
+      if (isMockMode()) {
+        const data = await mockDataStore.updateUser(userId, validated);
+        if (!data) throw new Error('User not found');
+        return schemas.userSchema.parse(data);
+      }
 
       const { data } = await http.patch<User>(`/users/${userId}/`, validated);
 
@@ -144,6 +177,12 @@ export const usersApi = {
       // Validate input
       const validated = schemas.activateUserSchema.parse({ is_active: activate });
 
+      if (isMockMode()) {
+        const data = await mockDataStore.activateUser(userId, activate);
+        if (!data) throw new Error('User not found');
+        return schemas.userSchema.parse(data);
+      }
+
       const { data } = await http.post<User>(`/users/${userId}/activate/`, validated);
 
       // Validate response
@@ -169,6 +208,12 @@ export const usersApi = {
     try {
       // Validate input
       const validated = schemas.assignRoleSchema.parse(roleData);
+
+      if (isMockMode()) {
+        const data = await mockDataStore.assignRole(userId, validated.role);
+        if (!data) throw new Error('User not found');
+        return schemas.userSchema.parse(data);
+      }
 
       const { data } = await http.post<User>(`/users/${userId}/assign-role/`, validated);
 
@@ -196,6 +241,11 @@ export const usersApi = {
       // Validate input
       const validated = schemas.setPasswordSchema.parse({ password });
 
+      if (isMockMode()) {
+        await mockDataStore.setPassword(userId, password);
+        return;
+      }
+
       await http.post(`/users/${userId}/set-password/`, validated);
     } catch (error: any) {
       if (error.name === 'ZodError') {
@@ -215,6 +265,12 @@ export const usersApi = {
     userId: number
   ): Promise<void> {
     try {
+      if (isMockMode()) {
+        const success = await mockDataStore.deleteUser(userId);
+        if (!success) throw new Error('User not found');
+        return;
+      }
+
       await http.delete(`/users/${userId}/`);
     } catch (error: any) {
       throw normalizeAxiosError(error);

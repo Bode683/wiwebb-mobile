@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "name": "Free Plan",
+    "description": "Basic internet access for casual users",
+    "default": true,
+    "available": true,
+    "requires_payment": false,
+    "daily_time_minutes": 60,
+    "daily_data_mb": 500,
+    "stripe_product_id": null,
+    "created_at": "2024-01-15T10:00:00Z",
+    "updated_at": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Basic Plan",
+    "description": "Extended access for regular users",
+    "default": false,
+    "available": true,
+    "requires_payment": true,
+    "daily_time_minutes": 240,
+    "daily_data_mb": 2048,
+    "stripe_product_id": "prod_basic_plan_001",
+    "created_at": "2024-01-15T10:00:00Z",
+    "updated_at": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": 3,
+    "name": "Pro Plan",
+    "description": "Unlimited access for power users",
+    "default": false,
+    "available": true,
+    "requires_payment": true,
+    "daily_time_minutes": null,
+    "daily_data_mb": null,
+    "stripe_product_id": "prod_pro_plan_001",
+    "created_at": "2024-01-15T10:00:00Z",
+    "updated_at": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": 4,
+    "name": "Enterprise Plan",
+    "description": "Custom solutions for businesses",
+    "default": false,
+    "available": true,
+    "requires_payment": true,
+    "daily_time_minutes": null,
+    "daily_data_mb": null,
+    "stripe_product_id": "prod_enterprise_plan_001",
+    "created_at": "2024-01-15T10:00:00Z",
+    "updated_at": "2024-01-15T10:00:00Z"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "user": 1,
+    "status": "completed",
+    "variant": "stripe",
+    "currency": "USD",
+    "total": 29.99,
+    "order_id": "ord_1a2b3c4d5e",
+    "payment_gateway": "stripe",
+    "created": "2024-12-01T10:30:00Z",
+    "modified": "2024-12-01T10:31:00Z"
+  },
+  {
+    "id": 2,
+    "user": 2,
+    "status": "completed",
+    "variant": "paystack",
+    "currency": "NGN",
+    "total": 15000,
+    "order_id": "ord_2b3c4d5e6f",
+    "payment_gateway": "paystack",
+    "created": "2024-11-15T14:20:00Z",
+    "modified": "2024-11-15T14:22:00Z"
+  },
+  {
+    "id": 3,
+    "user": 1,
+    "status": "pending",
+    "variant": "stripe",
+    "currency": "USD",
+    "total": 29.99,
+    "order_id": "ord_3c4d5e6f7g",
+    "payment_gateway": "stripe",
+    "created": "2024-12-05T09:15:00Z",
+    "modified": "2024-12-05T09:15:00Z"
+  },
+  {
+    "id": 4,
+    "user": 3,
+    "status": "failed",
+    "variant": "paypal",
+    "currency": "USD",
+    "total": 9.99,
+    "order_id": "ord_4d5e6f7g8h",
+    "payment_gateway": "paypal",
+    "created": "2024-11-28T16:45:00Z",
+    "modified": "2024-11-28T16:46:00Z"
+  },
+  {
+    "id": 5,
+    "user": 2,
+    "status": "refunded",
+    "variant": "stripe",
+    "currency": "USD",
+    "total": 29.99,
+    "order_id": "ord_5e6f7g8h9i",
+    "payment_gateway": "stripe",
+    "created": "2024-10-15T11:00:00Z",
+    "modified": "2024-10-20T14:30:00Z"
+  }
+]

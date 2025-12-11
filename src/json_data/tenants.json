@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "TechHub Lagos",
+    "slug": "techhub-lagos",
+    "description": "Co-working space and innovation hub in Lagos",
+    "email": "admin@techhub-lagos.com",
+    "url": "https://techhub-lagos.com",
+    "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "is_active": true,
+    "created_at": "2024-01-10T08:00:00Z",
+    "updated_at": "2024-01-10T08:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Coffee Connect",
+    "slug": "coffee-connect",
+    "description": "Premium coffee shop with high-speed WiFi",
+    "email": "info@coffeeconnect.com",
+    "url": "https://coffeeconnect.com",
+    "uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "is_active": true,
+    "created_at": "2024-02-15T10:30:00Z",
+    "updated_at": "2024-02-15T10:30:00Z"
+  },
+  {
+    "id": 3,
+    "name": "Airport Lounge Premium",
+    "slug": "airport-lounge",
+    "description": "Business class airport lounge services",
+    "email": "contact@airportlounge.com",
+    "url": "https://airportlounge.com",
+    "uuid": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+    "is_active": true,
+    "created_at": "2024-03-20T14:00:00Z",
+    "updated_at": "2024-03-20T14:00:00Z"
+  },
+  {
+    "id": 4,
+    "name": "University WiFi Network",
+    "slug": "university-wifi",
+    "description": "Campus-wide internet access for students",
+    "email": "it@university.edu",
+    "url": "https://university.edu",
+    "uuid": "d4e5f6a7-b8c9-0123-def0-234567890123",
+    "is_active": true,
+    "created_at": "2024-04-05T09:00:00Z",
+    "updated_at": "2024-04-05T09:00:00Z"
+  },
+  {
+    "id": 5,
+    "name": "Hotel Infinity",
+    "slug": "hotel-infinity",
+    "description": "Luxury hotel with complimentary WiFi",
+    "email": "support@hotelinfinity.com",
+    "url": "https://hotelinfinity.com",
+    "uuid": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "is_active": false,
+    "created_at": "2024-05-12T11:30:00Z",
+    "updated_at": "2024-11-20T16:00:00Z"
+  }
+]

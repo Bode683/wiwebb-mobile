@@ -2,6 +2,7 @@ import { AxiosInstance } from 'axios';
 import { normalizeAxiosError, normalizeZodError } from './errors';
 import * as schemas from './schemas';
 import type { RadiusUser, RadiusGroup, RadiusSession, CreateRadiusUserRequest } from './types';
+import { mockDataStore, isMockMode } from '../lib/mockDataStore';
 
 /**
  * RADIUS Management API module
@@ -19,6 +20,11 @@ export const radiusApi = {
    */
   async listUsers(http: AxiosInstance): Promise<RadiusUser[]> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.listRadiusUsers();
+        return data.map(user => schemas.radiusUserSchema.parse(user));
+      }
+
       const { data } = await http.get<RadiusUser[]>('/radius/users/');
       return data.map(user => schemas.radiusUserSchema.parse(user));
     } catch (error: any) {
@@ -35,6 +41,12 @@ export const radiusApi = {
    */
   async getUser(http: AxiosInstance, id: number): Promise<RadiusUser> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.getRadiusUser(id);
+        if (!data) throw new Error('RADIUS user not found');
+        return schemas.radiusUserSchema.parse(data);
+      }
+
       const { data } = await http.get<RadiusUser>(`/radius/users/${id}/`);
       return schemas.radiusUserSchema.parse(data);
     } catch (error: any) {
@@ -55,6 +67,12 @@ export const radiusApi = {
   ): Promise<RadiusUser> {
     try {
       const validated = schemas.createRadiusUserSchema.parse(request);
+
+      if (isMockMode()) {
+        const data = await mockDataStore.createRadiusUser(validated);
+        return schemas.radiusUserSchema.parse(data);
+      }
+
       const { data } = await http.post<RadiusUser>('/radius/users/', validated);
       return schemas.radiusUserSchema.parse(data);
     } catch (error: any) {
@@ -75,6 +93,12 @@ export const radiusApi = {
     updates: Partial<CreateRadiusUserRequest>
   ): Promise<RadiusUser> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.updateRadiusUser(id, updates);
+        if (!data) throw new Error('RADIUS user not found');
+        return schemas.radiusUserSchema.parse(data);
+      }
+
       const { data } = await http.put<RadiusUser>(`/radius/users/${id}/`, updates);
       return schemas.radiusUserSchema.parse(data);
     } catch (error: any) {
@@ -91,6 +115,12 @@ export const radiusApi = {
    */
   async deleteUser(http: AxiosInstance, id: number): Promise<void> {
     try {
+      if (isMockMode()) {
+        const success = await mockDataStore.deleteRadiusUser(id);
+        if (!success) throw new Error('RADIUS user not found');
+        return;
+      }
+
       await http.delete(`/radius/users/${id}/`);
     } catch (error: any) {
       throw normalizeAxiosError(error);
@@ -107,6 +137,11 @@ export const radiusApi = {
    */
   async listGroups(http: AxiosInstance): Promise<RadiusGroup[]> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.listRadiusGroups();
+        return data.map(group => schemas.radiusGroupSchema.parse(group));
+      }
+
       const { data } = await http.get<RadiusGroup[]>('/radius/groups/');
       return data.map(group => schemas.radiusGroupSchema.parse(group));
     } catch (error: any) {
@@ -127,6 +162,11 @@ export const radiusApi = {
    */
   async listActiveSessions(http: AxiosInstance): Promise<RadiusSession[]> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.listActiveSessions();
+        return data.map(session => schemas.radiusSessionSchema.parse(session));
+      }
+
       const { data } = await http.get<RadiusSession[]>('/radius/active-sessions/');
       return data.map(session => schemas.radiusSessionSchema.parse(session));
     } catch (error: any) {
@@ -143,6 +183,11 @@ export const radiusApi = {
    */
   async getAccounting(http: AxiosInstance, params?: any): Promise<RadiusSession[]> {
     try {
+      if (isMockMode()) {
+        const data = await mockDataStore.getAccounting();
+        return data.map(session => schemas.radiusSessionSchema.parse(session));
+      }
+
       const { data } = await http.get<RadiusSession[]>('/radius/accounting/', { params });
       return data.map(session => schemas.radiusSessionSchema.parse(session));
     } catch (error: any) {
@@ -159,6 +204,10 @@ export const radiusApi = {
    */
   async getPostAuthLogs(http: AxiosInstance, params?: any): Promise<any[]> {
     try {
+      if (isMockMode()) {
+        return await mockDataStore.getPostAuthLog();
+      }
+
       const { data } = await http.get('/radius/post-auth-log/', { params });
       return data;
     } catch (error: any) {
