@@ -63,8 +63,7 @@ export const mockTransactions: Transaction[] = [
     currency: 'USD',
     status: 'completed',
     paymentMethodId: 'pm_1',
-    rideId: 'ride_1',
-    description: 'Ride from Downtown to Airport',
+    description: 'Premium WiFi Plan - 1 Month',
     createdAt: '2025-10-28T14:30:00Z',
     updatedAt: '2025-10-28T14:32:00Z',
     receiptUrl: 'https://receipts.example.com/tx_1'
@@ -75,8 +74,7 @@ export const mockTransactions: Transaction[] = [
     currency: 'USD',
     status: 'completed',
     paymentMethodId: 'pm_1',
-    rideId: 'ride_2',
-    description: 'Ride from Home to Office',
+    description: 'WiFi Security Shield Add-on',
     createdAt: '2025-10-25T08:15:00Z',
     updatedAt: '2025-10-25T08:17:00Z',
     receiptUrl: 'https://receipts.example.com/tx_2'
@@ -87,8 +85,7 @@ export const mockTransactions: Transaction[] = [
     currency: 'USD',
     status: 'refunded',
     paymentMethodId: 'pm_2',
-    rideId: 'ride_3',
-    description: 'Ride from Mall to Home',
+    description: 'Standard WiFi Plan - 1 Month',
     createdAt: '2025-10-20T18:45:00Z',
     updatedAt: '2025-10-20T19:30:00Z',
     receiptUrl: 'https://receipts.example.com/tx_3'
@@ -99,8 +96,7 @@ export const mockTransactions: Transaction[] = [
     currency: 'USD',
     status: 'failed',
     paymentMethodId: 'pm_2',
-    rideId: 'ride_4',
-    description: 'Ride from Airport to Hotel',
+    description: 'Premium WiFi Plan - 3 Months',
     createdAt: '2025-10-15T22:10:00Z',
     updatedAt: '2025-10-15T22:11:00Z',
     failureReason: 'Insufficient funds'
@@ -263,18 +259,16 @@ export async function getTransactionHistory(
 
 /**
  * Process payment
- * 
+ *
  * @param amount Amount to charge
  * @param paymentMethodId Payment method ID to use
  * @param description Payment description
- * @param rideId Optional ride ID
  * @returns Promise with payment result
  */
 export async function processPayment(
   amount: number,
   paymentMethodId: string,
-  description: string,
-  rideId?: string
+  description: string
 ): Promise<PaymentResult> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 2000));
@@ -299,16 +293,15 @@ export async function processPayment(
       currency: 'USD',
       status: 'completed',
       paymentMethodId,
-      rideId,
       description,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       receiptUrl: `https://receipts.example.com/tx_${Date.now()}`
     };
-    
+
     // Add to mock data
     mockTransactions.push(transaction);
-    
+
     return {
       success: true,
       transactionId: transaction.id
@@ -321,16 +314,15 @@ export async function processPayment(
       currency: 'USD',
       status: 'failed',
       paymentMethodId,
-      rideId,
       description,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       failureReason: 'Payment declined by issuer'
     };
-    
+
     // Add to mock data
     mockTransactions.push(transaction);
-    
+
     return {
       success: false,
       transactionId: transaction.id,

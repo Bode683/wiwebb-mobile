@@ -51,15 +51,15 @@ export function NotificationModal({
         {
           id: "1",
           title: "Welcome!",
-          message: "Thanks for using Mobility. Book your first ride today!",
+          message: "Thanks for using WiWebb. Connect to fast WiFi today!",
           timestamp: new Date(),
           read: false,
           type: "info",
         },
         {
           id: "2",
-          title: "Ride Completed",
-          message: "Your ride has been completed successfully.",
+          title: "Connection Secured",
+          message: "Your WiFi connection is now protected with encryption.",
           timestamp: new Date(Date.now() - 3600000),
           read: false,
           type: "success",

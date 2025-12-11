@@ -69,7 +69,7 @@ export default function DashboardScreen() {
               {getGreeting()}, {user?.username || 'User'}!
             </Text>
             <Text variant="bodyMedium" style={[styles.subtitle, { color: theme.colors.onSurfaceVariant }]}>
-              Here's your WiFi network overview
+              Here&apos;s your WiFi network overview
             </Text>
           </View>
         </View>

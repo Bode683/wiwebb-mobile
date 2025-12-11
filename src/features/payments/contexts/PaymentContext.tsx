@@ -106,8 +106,7 @@ interface PaymentContextType {
   makePayment: (
     amount: number,
     paymentMethodId: string,
-    description: string,
-    rideId?: string
+    description: string
   ) => Promise<PaymentResult>;
   getSelectedPaymentMethod: () => PaymentMethod | null;
 }
@@ -303,8 +302,7 @@ export function PaymentProvider({ children }: PaymentProviderProps) {
   const makePayment = async (
     amount: number,
     paymentMethodId: string,
-    description: string,
-    rideId?: string
+    description: string
   ): Promise<PaymentResult> => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
@@ -313,8 +311,7 @@ export function PaymentProvider({ children }: PaymentProviderProps) {
       const result = await processPayment(
         amount,
         paymentMethodId,
-        description,
-        rideId
+        description
       );
 
       // If successful, add transaction to state
@@ -327,7 +324,6 @@ export function PaymentProvider({ children }: PaymentProviderProps) {
           currency: "USD",
           status: "completed",
           paymentMethodId,
-          rideId,
           description,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),

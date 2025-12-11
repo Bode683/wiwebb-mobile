@@ -8,23 +8,9 @@ import { Button, Card, Divider, List, Surface } from "react-native-paper";
 /**
  * Safety Screen
  *
- * Provides safety information, features, and emergency contacts
+ * Provides security information, features, and WiFi protection guidelines
  */
 export default function SafetyScreen() {
-
-  const handleEmergencyContact = () => {
-    showToast(
-      "info",
-      "In a real app, this would connect to emergency services"
-    );
-  };
-
-  const handleShareLocation = () => {
-    showToast(
-      "info",
-      "In a real app, this would share your location with trusted contacts"
-    );
-  };
 
   return (
     <Surface style={styles.container}>
@@ -33,55 +19,54 @@ export default function SafetyScreen() {
           <ThemedText style={styles.title}>Safety Center</ThemedText>
         </View>
 
-        {/* Emergency Card */}
+        {/* Security Card */}
         <Card style={styles.emergencyCard}>
           <Card.Content>
             <ThemedText style={styles.emergencyTitle}>
-              Emergency Assistance
+              Network Security
             </ThemedText>
             <ThemedText style={styles.emergencyText}>
-              If you&apos;re in an emergency situation, tap the button below to
-              contact emergency services.
+              Your WiFi connections are protected with advanced security protocols. Always verify network authenticity before connecting.
             </ThemedText>
           </Card.Content>
           <Card.Actions>
             <Button
               mode="contained"
-              buttonColor="#E53E3E"
+              buttonColor="#0a7ea4"
               textColor="#FFFFFF"
-              onPress={handleEmergencyContact}
+              onPress={() => showToast("info", "Security features enabled")}
             >
-              Emergency Contact
+              Security Status
             </Button>
           </Card.Actions>
         </Card>
 
         {/* Safety Features */}
         <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Safety Features</ThemedText>
+          <ThemedText style={styles.sectionTitle}>Security Features</ThemedText>
 
           <List.Item
-            title="Share My Trip"
-            description="Share your trip details with trusted contacts"
-            left={(props) => <List.Icon {...props} icon="share" />}
-            onPress={handleShareLocation}
+            title="Encryption Protection"
+            description="All your WiFi connections use end-to-end encryption"
+            left={(props) => <List.Icon {...props} icon="lock" />}
+            onPress={() => showToast("info", "Encryption is enabled on all connections")}
             style={styles.listItem}
           />
 
           <List.Item
-            title="Verify Your Ride"
-            description="Check the license plate and driver details before entering the vehicle"
+            title="Network Verification"
+            description="Verify network authenticity to avoid connecting to unsafe networks"
             left={(props) => <List.Icon {...props} icon="check-circle" />}
-            onPress={() => showToast("info", "Always verify your ride details")}
+            onPress={() => showToast("info", "Always check network security settings")}
             style={styles.listItem}
           />
 
           <List.Item
-            title="Trusted Contacts"
-            description="Set up trusted contacts for quick access during rides"
-            left={(props) => <List.Icon {...props} icon="account-multiple" />}
+            title="Data Protection"
+            description="Manage what data is shared and visible on public networks"
+            left={(props) => <List.Icon {...props} icon="shield-check" />}
             onPress={() =>
-              showToast("info", "Trusted contacts feature coming soon")
+              showToast("info", "Data protection settings available in preferences")
             }
             style={styles.listItem}
           />
@@ -89,16 +74,15 @@ export default function SafetyScreen() {
 
         <Divider style={styles.divider} />
 
-        {/* Safety Tips */}
+        {/* Security Tips */}
         <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Safety Tips</ThemedText>
+          <ThemedText style={styles.sectionTitle}>Security Tips</ThemedText>
 
           <Card style={styles.tipCard}>
             <Card.Content>
-              <ThemedText style={styles.tipTitle}>Wait Indoors</ThemedText>
+              <ThemedText style={styles.tipTitle}>Use Trusted Networks</ThemedText>
               <ThemedText style={styles.tipText}>
-                Wait indoors until your driver arrives to minimize time on the
-                street.
+                Connect only to networks you recognize and trust. Avoid public networks without VPN protection.
               </ThemedText>
             </Card.Content>
           </Card>
@@ -106,21 +90,19 @@ export default function SafetyScreen() {
           <Card style={styles.tipCard}>
             <Card.Content>
               <ThemedText style={styles.tipTitle}>
-                Verify Vehicle Details
+                Update Passwords Regularly
               </ThemedText>
               <ThemedText style={styles.tipText}>
-                Always check the license plate, car model, and driver photo
-                before entering the vehicle.
+                Change your WiFi passwords periodically and use strong, unique passwords to prevent unauthorized access.
               </ThemedText>
             </Card.Content>
           </Card>
 
           <Card style={styles.tipCard}>
             <Card.Content>
-              <ThemedText style={styles.tipTitle}>Share Your Trip</ThemedText>
+              <ThemedText style={styles.tipTitle}>Disable Auto-Connect</ThemedText>
               <ThemedText style={styles.tipText}>
-                Share your trip details with a friend or family member so they
-                can track your journey.
+                Turn off automatic connection to previously saved networks to avoid connecting to spoofed or unsafe networks.
               </ThemedText>
             </Card.Content>
           </Card>
@@ -128,32 +110,29 @@ export default function SafetyScreen() {
           <Card style={styles.tipCard}>
             <Card.Content>
               <ThemedText style={styles.tipTitle}>
-                Ride in the Back Seat
+                Recognize Phishing Attempts
               </ThemedText>
               <ThemedText style={styles.tipText}>
-                When possible, ride in the back seat to give yourself and the
-                driver personal space.
+                Be cautious of suspicious WiFi network names or unexpected connection requests. Verify network sources before connecting.
               </ThemedText>
             </Card.Content>
           </Card>
         </View>
 
-        {/* Community Guidelines */}
+        {/* Usage Guidelines */}
         <View style={styles.section}>
           <ThemedText style={styles.sectionTitle}>
-            Community Guidelines
+            Usage Guidelines
           </ThemedText>
           <ThemedText style={styles.guidelinesText}>
-            We&apos;re committed to providing a safe environment for all users. Our
-            community guidelines ensure respect, safety, and comfort for
-            everyone.
+            We&apos;re committed to providing secure and reliable WiFi services for all users. Our usage guidelines ensure network integrity, privacy protection, and fair access for everyone.
           </ThemedText>
           <Button
             mode="outlined"
             onPress={() =>
               showToast(
                 "info",
-                "Community guidelines would open in a full view"
+                "Usage guidelines would open in a full view"
               )
             }
             style={styles.guidelinesButton}

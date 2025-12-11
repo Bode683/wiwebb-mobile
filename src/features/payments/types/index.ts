@@ -68,7 +68,6 @@ export interface Transaction {
   status: TransactionStatus;
   paymentMethodId: string;
   paymentMethod?: PaymentMethod;
-  rideId?: string;
   description: string;
   createdAt: string;
   updatedAt: string;

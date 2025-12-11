@@ -16,7 +16,6 @@ import { PaymentMethodSelector } from "./PaymentMethodSelector";
 interface PaymentProcessorProps {
   amount: number;
   description: string;
-  rideId?: string;
   onSuccess?: () => void;
   onFailure?: (error: string) => void;
   onCancel?: () => void;
@@ -26,7 +25,6 @@ interface PaymentProcessorProps {
 export function PaymentProcessor({
   amount,
   description,
-  rideId,
   onSuccess,
   onFailure,
   onCancel,
@@ -64,8 +62,7 @@ export function PaymentProcessor({
       const result = await makePayment(
         amount,
         selectedPaymentMethodId,
-        description,
-        rideId
+        description
       );
 
       if (result.success) {

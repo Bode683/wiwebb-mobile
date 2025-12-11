@@ -27,17 +27,16 @@ export default function InformationScreen() {
 
         {/* About Section */}
         <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>About Mobility</ThemedText>
+          <ThemedText style={styles.sectionTitle}>About WiWebb</ThemedText>
           <ThemedText style={styles.paragraph}>
-            Mobility is a ride-sharing platform designed to provide convenient,
-            reliable, and affordable transportation options for users. Our
-            mission is to transform urban mobility and make transportation
-            accessible to everyone.
+            WiWebb is a WiFi management portal designed to provide seamless, secure,
+            and reliable wireless connectivity. Our mission is to simplify WiFi
+            management and provide users with fast, protected internet access.
           </ThemedText>
           <ThemedText style={styles.paragraph}>
-            Founded in 2025, we&apos;re committed to innovation, sustainability, and
-            community development. Our services are available in over 50 cities
-            worldwide.
+            Founded in 2025, we&apos;re committed to innovation, security, and user
+            experience. Our platform helps users manage and monitor their WiFi
+            connections with ease and confidence.
           </ThemedText>
         </View>
 
@@ -102,32 +101,32 @@ export default function InformationScreen() {
 
           <List.Item
             title="Website"
-            description="www.mobility-app.com"
+            description="www.wiwebb.com"
             left={(props) => <List.Icon {...props} icon="web" />}
-            onPress={() => handleLinkPress("https://www.mobility-app.com")}
+            onPress={() => handleLinkPress("https://www.wiwebb.com")}
           />
 
           <List.Item
             title="Email"
-            description="info@mobility-app.com"
+            description="info@wiwebb.com"
             left={(props) => <List.Icon {...props} icon="email" />}
-            onPress={() => handleLinkPress("mailto:info@mobility-app.com")}
+            onPress={() => handleLinkPress("mailto:info@wiwebb.com")}
           />
 
           <List.Item
             title="Phone"
-            description="+1 (555) 123-4567"
+            description="+1 (555) 234-5678"
             left={(props) => <List.Icon {...props} icon="phone" />}
-            onPress={() => handleLinkPress("tel:+15551234567")}
+            onPress={() => handleLinkPress("tel:+15552345678")}
           />
 
           <List.Item
             title="Address"
-            description="123 Mobility Street, San Francisco, CA 94105"
+            description="456 WiFi Avenue, Austin, TX 78701"
             left={(props) => <List.Icon {...props} icon="map-marker" />}
             onPress={() =>
               handleLinkPress(
-                "https://maps.google.com/?q=123+Mobility+Street,+San+Francisco,+CA+94105"
+                "https://maps.google.com/?q=456+WiFi+Avenue,+Austin,+TX+78701"
               )
             }
           />
@@ -141,7 +140,7 @@ export default function InformationScreen() {
             <Button
               mode="outlined"
               icon="twitter"
-              onPress={() => handleLinkPress("https://twitter.com/mobility")}
+              onPress={() => handleLinkPress("https://twitter.com/wiwebb")}
               style={styles.socialButton}
             >
               Twitter
@@ -150,7 +149,7 @@ export default function InformationScreen() {
             <Button
               mode="outlined"
               icon="facebook"
-              onPress={() => handleLinkPress("https://facebook.com/mobility")}
+              onPress={() => handleLinkPress("https://facebook.com/wiwebb")}
               style={styles.socialButton}
             >
               Facebook
@@ -159,7 +158,7 @@ export default function InformationScreen() {
             <Button
               mode="outlined"
               icon="instagram"
-              onPress={() => handleLinkPress("https://instagram.com/mobility")}
+              onPress={() => handleLinkPress("https://instagram.com/wiwebb")}
               style={styles.socialButton}
             >
               Instagram
