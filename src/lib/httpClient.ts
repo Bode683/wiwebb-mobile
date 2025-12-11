@@ -1,41 +1,45 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import axiosRetry, { exponentialDelay, isNetworkError } from 'axios-retry';
-import { getAccessToken } from './supabase';
+import { authStorage } from './authStorage';
 import { normalizeAxiosError } from '@/api/errors';
 
 /**
  * Axios HTTP client with interceptors for auth and error handling
- * 
- * CRITICAL FIX: Async interceptor pattern
- * - Axios request interceptors can be async
- * - We properly await the token fetch before modifying config
- * - This prevents race conditions with auth token injection
+ *
+ * Django Backend Integration:
+ * - Uses Token-based authentication (DRF Token Auth)
+ * - Token format: "Token <token>"
+ * - Tokens stored in AsyncStorage
+ * - CSRF tokens handled via Django middleware
  */
 
 const httpClient: AxiosInstance = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_BASE_URL || '',
+  baseURL: process.env.EXPO_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000/api/v1',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
+  withCredentials: true, // Include cookies for CSRF
 });
 
 /**
- * Request interceptor: Inject auth token from Supabase session
- * FIXED: Properly handle async token retrieval
+ * Request interceptor: Inject Django auth token
+ * Token format: "Token <token>" (DRF standard)
  */
 httpClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     try {
-      // Await token fetch - this is the critical fix
-      const token = await getAccessToken();
-      
+      // Get token from AsyncStorage
+      const token = await authStorage.getAuthToken();
+
       if (token) {
         // Ensure headers object exists
         config.headers = config.headers || {};
-        config.headers.Authorization = `Bearer ${token}`;
+        // Django REST Framework uses "Token" prefix
+        config.headers.Authorization = `Token ${token}`;
       }
-      
+
       return config;
     } catch (error) {
       // If token fetch fails, proceed without auth header

@@ -54,8 +54,8 @@ function RootNavigator() {
   const router = useRouter();
   const segments = useSegments();
 
-  // Get auth state from ApiContext (managed by Supabase listener)
-  const { session, isAuthLoading } = useAuthState();
+  // Get auth state from ApiContext (managed by Django auth)
+  const { user, isAuthenticated, isAuthLoading } = useAuthState();
 
   useEffect(() => {
     async function prepare() {
@@ -90,15 +90,17 @@ function RootNavigator() {
     const inAuthScreen = segments[0] === "auth";
 
     // Redirect authenticated users from auth screen to home
-    if (session && inAuthScreen) {
+    if (isAuthenticated && inAuthScreen) {
+      console.log('Authenticated user on auth screen, redirecting to home...');
       router.replace("/(drawer)/home");
     }
 
     // Protect drawer routes - redirect to auth if not authenticated
-    if (!session && inDrawerGroup) {
+    if (!isAuthenticated && inDrawerGroup) {
+      console.log('Unauthenticated user on drawer screen, redirecting to auth...');
       router.replace("/auth");
     }
-  }, [session, segments, isReady, isAuthLoading, router]);
+  }, [isAuthenticated, segments, isReady, isAuthLoading, router]);
 
   // Show nothing while initializing
   if (!isReady || isAuthLoading) {

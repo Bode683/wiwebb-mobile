@@ -1,6 +1,5 @@
-import { authApi } from "@/api/auth.api";
+import { authStorage } from "@/lib/authStorage";
 import { ONBOARDING_KEY } from "@/lib/constants";
-import { getSupabase } from "@/lib/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -73,9 +72,9 @@ export default function SplashScreenComponent() {
         // Check onboarding and auth status
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Minimum splash time
 
-        const [onboardingCompleted, session] = await Promise.all([
+        const [onboardingCompleted, authToken] = await Promise.all([
           AsyncStorage.getItem(ONBOARDING_KEY),
-          authApi.getSession(getSupabase()),
+          authStorage.getAuthToken(),
         ]);
 
         // Fade out animation
@@ -90,7 +89,7 @@ export default function SplashScreenComponent() {
         // Navigate based on state
         if (!onboardingCompleted) {
           router.replace("/onboarding");
-        } else if (session) {
+        } else if (authToken) {
           router.replace("/(drawer)/home");
         } else {
           router.replace("/auth");

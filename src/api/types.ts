@@ -14,7 +14,14 @@ export type SignInRequest = z.infer<typeof schemas.signInSchema>;
 export type SignUpRequest = z.infer<typeof schemas.signUpSchema>;
 export type SignInWithOtpRequest = z.infer<typeof schemas.signInWithOtpSchema>;
 export type User = z.infer<typeof schemas.userSchema>;
-export type Session = z.infer<typeof schemas.sessionSchema>;
+export type UserTenant = z.infer<typeof schemas.userTenantSchema>;
+export type LoginResponse = z.infer<typeof schemas.loginResponseSchema>;
+export type AuthResponse = z.infer<typeof schemas.authResponseSchema>;
+export type UpdateUserRequest = z.infer<typeof schemas.updateUserSchema>;
+export type CreateUserRequest = z.infer<typeof schemas.createUserSchema>;
+export type ActivateUserRequest = z.infer<typeof schemas.activateUserSchema>;
+export type AssignRoleRequest = z.infer<typeof schemas.assignRoleSchema>;
+export type SetPasswordRequest = z.infer<typeof schemas.setPasswordSchema>;
 
 // ============================================================================
 // Profile Types
@@ -24,28 +31,11 @@ export type Profile = z.infer<typeof schemas.profileSchema>;
 export type UpdateProfileRequest = z.infer<typeof schemas.updateProfileSchema>;
 
 // ============================================================================
-// Trip Types
-// ============================================================================
-
-export type TripStatus = z.infer<typeof schemas.tripStatusSchema>;
-export type Location = z.infer<typeof schemas.locationSchema>;
-export type Trip = z.infer<typeof schemas.tripSchema>;
-export type CreateTripRequest = z.infer<typeof schemas.createTripSchema>;
-export type UpdateTripRequest = z.infer<typeof schemas.updateTripSchema>;
-
-// ============================================================================
 // Payment Types
 // ============================================================================
 
 export type PaymentMethod = z.infer<typeof schemas.paymentMethodSchema>;
 export type Payment = z.infer<typeof schemas.paymentSchema>;
-
-// ============================================================================
-// Address Types
-// ============================================================================
-
-export type Address = z.infer<typeof schemas.addressSchema>;
-export type CreateAddressRequest = z.infer<typeof schemas.createAddressSchema>;
 
 // ============================================================================
 // Notification Types
@@ -76,3 +66,25 @@ export interface ListOptions {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+
+// ============================================================================
+// Wiwebb Types
+// ============================================================================
+
+export type Tenant = z.infer<typeof schemas.tenantSchema>;
+export type Hotspot = z.infer<typeof schemas.hotspotSchema>;
+export type CreateHotspotRequest = z.infer<typeof schemas.createHotspotSchema>;
+
+export type RadiusUser = z.infer<typeof schemas.radiusUserSchema>;
+export type RadiusGroup = z.infer<typeof schemas.radiusGroupSchema>;
+export type RadiusSession = z.infer<typeof schemas.radiusSessionSchema>;
+export type CreateRadiusUserRequest = z.infer<typeof schemas.createRadiusUserSchema>;
+
+export type Plan = z.infer<typeof schemas.planSchema>;
+export type PlanPricing = z.infer<typeof schemas.planPricingSchema>;
+export type Subscription = z.infer<typeof schemas.subscriptionSchema>;
+export type PaymentGateway = z.infer<typeof schemas.paymentGatewaySchema>;
+export type WiwebbPayment = z.infer<typeof schemas.wiwebbPaymentSchema>;
+export type CreatePaymentRequest = z.infer<typeof schemas.createPaymentSchema>;
+
+export type DashboardStats = z.infer<typeof schemas.dashboardStatsSchema>;

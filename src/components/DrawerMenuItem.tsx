@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/use-theme';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -54,7 +54,7 @@ export function DrawerMenuItem({
               borderRadius: theme.radii.md,
             },
           ]}>
-          <IconSymbol
+          <MaterialCommunityIcons
             name={icon as any}
             size={24}
             color={isHighlighted ? theme.colors.warning : theme.colors.text}
@@ -88,8 +88,8 @@ export function DrawerMenuItem({
       </View>
 
       {showChevron && (
-        <IconSymbol
-          name="chevron.right"
+        <MaterialCommunityIcons
+          name="chevron-right"
           size={20}
           color={isHighlighted ? theme.colors.background : theme.colors.textMuted}
         />

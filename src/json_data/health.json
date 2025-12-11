@@ -1,0 +1,7 @@
+{
+  "services": [
+    { "name": "API Gateway", "status": "Healthy", "latency": 120 },
+    { "name": "DB Cluster", "status": "Healthy", "latency": 95 },
+    { "name": "Auth Service", "status": "Degraded", "latency": 240 }
+  ]
+}
