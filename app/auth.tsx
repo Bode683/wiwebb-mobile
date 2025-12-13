@@ -140,9 +140,9 @@ export default function AuthScreen() {
               style={styles.logo}
               resizeMode="contain"
             />
-            <ThemedText style={styles.appName}>Mobility</ThemedText>
+            <ThemedText style={styles.appName}>WiWebb</ThemedText>
             <ThemedText style={styles.tagline}>
-              Your journey starts here
+              Your WiFi starts here
             </ThemedText>
           </View>
 

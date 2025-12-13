@@ -180,7 +180,6 @@ export const paymentMethodSchema = z.object({
 
 export const paymentSchema = z.object({
   id: z.string().uuid(),
-  trip_id: z.string().uuid(),
   user_id: z.string().uuid(),
   amount: z.number().positive(),
   currency: z.string().length(3).default('USD'),
@@ -199,7 +198,7 @@ export const notificationSchema = z.object({
   user_id: z.string().uuid(),
   title: z.string(),
   message: z.string(),
-  type: z.enum(['info', 'success', 'warning', 'error', 'trip_update']),
+  type: z.enum(['info', 'success', 'warning', 'error']),
   is_read: z.boolean().default(false),
   data: z.record(z.any()).optional(),
   created_at: z.string().datetime(),

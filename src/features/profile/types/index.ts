@@ -42,7 +42,6 @@ export interface UserPreferences {
   id: string;
   user_id: string;
   default_payment_method_id?: string;
-  default_ride_type_id?: string;
   language: string;
   theme: 'light' | 'dark' | 'system';
   notifications_enabled: boolean;

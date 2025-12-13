@@ -34,23 +34,23 @@ interface OnboardingSlide {
 const slides: OnboardingSlide[] = [
   {
     id: '1',
-    icon: 'car-sport',
-    title: 'Book a ride in seconds',
-    description: 'Request a ride with just a few taps and get picked up in minutes',
+    icon: 'wifi',
+    title: 'Connect to Fast WiFi',
+    description: 'Browse available WiFi networks and connect with just a few taps',
     color: '#0a7ea4',
   },
   {
     id: '2',
-    icon: 'location',
-    title: 'Track your driver in real time',
-    description: 'See exactly where your driver is and when they will arrive',
+    icon: 'shield-checkmark',
+    title: 'Secure & Reliable',
+    description: 'Manage your connections safely with encryption and network protection',
     color: '#10b981',
   },
   {
     id: '3',
-    icon: 'card',
-    title: 'Pay securely and easily',
-    description: 'Multiple payment options with secure transactions every time',
+    icon: 'settings',
+    title: 'Easy Management',
+    description: 'Monitor usage, configure networks, and control your WiFi access seamlessly',
     color: '#f59e0b',
   },
 ];

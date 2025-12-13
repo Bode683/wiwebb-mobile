@@ -19,7 +19,6 @@ export default function SettingsScreen() {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [locationEnabled, setLocationEnabled] = React.useState(true);
   const [darkMode, setDarkMode] = React.useState(false);
-  const [saveRideHistory, setSaveRideHistory] = React.useState(true);
 
   const handleSettingChange = (setting: string, value: boolean) => {
     switch (setting) {
@@ -37,13 +36,6 @@ export default function SettingsScreen() {
       case "darkMode":
         setDarkMode(value);
         showToast("info", `Dark mode ${value ? "enabled" : "disabled"}`);
-        break;
-      case "saveRideHistory":
-        setSaveRideHistory(value);
-        showToast(
-          "info",
-          `Save ride history ${value ? "enabled" : "disabled"}`
-        );
         break;
     }
   };
@@ -71,22 +63,6 @@ export default function SettingsScreen() {
               />
             )}
           />
-
-          <Divider />
-
-          <List.Item
-            title="Save Ride History"
-            description="Store your ride history on this device"
-            left={(props) => <List.Icon {...props} icon="history" />}
-            right={() => (
-              <Switch
-                value={saveRideHistory}
-                onValueChange={(value) =>
-                  handleSettingChange("saveRideHistory", value)
-                }
-              />
-            )}
-          />
         </List.Section>
 
         <List.Section>
@@ -94,7 +70,7 @@ export default function SettingsScreen() {
 
           <List.Item
             title="Push Notifications"
-            description="Receive updates about your rides"
+            description="Receive updates about WiFi connections and security alerts"
             left={(props) => <List.Icon {...props} icon="bell" />}
             right={() => (
               <Switch

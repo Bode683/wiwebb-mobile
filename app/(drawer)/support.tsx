@@ -51,33 +51,33 @@ export default function SupportScreen() {
   const faqItems = [
     {
       id: "faq1",
-      question: "How do I request a ride?",
+      question: "How do I connect to a WiFi network?",
       answer:
-        'Open the app, set your pickup location and destination, choose your ride type, and tap "Request Ride".',
+        'Open the app, select an available network from the list, enter the password if required, and tap "Connect".',
     },
     {
       id: "faq2",
-      question: "How do I add a payment method?",
+      question: "How do I manage my payment subscription?",
       answer:
-        'Go to Payment Methods in the menu, tap "Add Payment Method", and enter your card details or connect your preferred payment service.',
+        'Go to Billing & Subscription in Settings, view your active subscription, and manage renewal or upgrade options from there.',
     },
     {
       id: "faq3",
-      question: "Can I schedule a ride in advance?",
+      question: "What devices can I connect at once?",
       answer:
-        'Yes, you can schedule rides up to 7 days in advance. When setting up your ride, select "Schedule" instead of "Request Now".',
+        'Your plan allows simultaneous connections. Check your plan details in Settings to see the maximum number of devices you can connect.',
     },
     {
       id: "faq4",
-      question: "How do I report an issue with my ride?",
+      question: "How do I troubleshoot connection problems?",
       answer:
-        'Go to your Ride History, select the specific ride, and tap "Report an Issue". You can also contact support directly through this screen.',
+        'Try restarting your device, forgetting the network and reconnecting, or moving closer to the WiFi router. Contact support if issues persist.',
     },
     {
       id: "faq5",
-      question: "How do I change my default payment method?",
+      question: "How can I view my data usage?",
       answer:
-        'Go to Payment Methods, find the payment method you want to set as default, and tap "Set as Default".',
+        'Go to Usage Statistics in the main menu to see your bandwidth usage, data consumed, and performance metrics over time.',
     },
   ];
 
@@ -92,11 +92,10 @@ export default function SupportScreen() {
         <Card style={styles.emergencyCard}>
           <Card.Content>
             <ThemedText style={styles.emergencyTitle}>
-              Need urgent help?
+              Connection Issues?
             </ThemedText>
             <ThemedText style={styles.emergencyText}>
-              For emergencies during a ride, use the Emergency button in the
-              ride screen.
+              If you&apos;re having trouble connecting to WiFi, check your network settings or contact our support team.
             </ThemedText>
           </Card.Content>
           <Card.Actions>
@@ -105,11 +104,11 @@ export default function SupportScreen() {
               onPress={() =>
                 showToast(
                   "info",
-                  "Emergency services would be contacted in a real app"
+                  "Support team will assist you shortly"
                 )
               }
             >
-              Emergency Help
+              Get Help
             </Button>
           </Card.Actions>
         </Card>
@@ -181,7 +180,7 @@ export default function SupportScreen() {
 
           <List.Item
             title="Email"
-            description="support@mobility-app.com"
+            description="support@wiwebb.com"
             left={(props) => <List.Icon {...props} icon="email" />}
           />
 
