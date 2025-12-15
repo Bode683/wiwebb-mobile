@@ -1,0 +1,40 @@
+We need to onboard devices at this stage before we can proceed
+
+Hotspot menu ->
+add hotspot
+add access-point
+add controller
+add search hotspot
+
+RadiusUsers Menu ->
+Add users - based on group (owner, guest)
+Add buttons for activate/disactivate 
+		block/unblock
+		onboard or standby
+Active sessions -> all the above buttons
+display on a table
+
+Subscription billing plans -> make sure the plans are well 
+
+Change the colors to match wiwebb colors
+
+Payment Methods
+- add stripe
+- master card
+- samsung pay
+- Applepay
+- OM/Momo
+
+Make sure that role based access is enforced everywhere
+
+
+Core features
+1. client onboarding
+2. smallstep cert/mkcert
+3. 
+radius & pg admin
+django
+trafik
+
+
+season 3 spartacus-torrent9

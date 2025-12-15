@@ -97,14 +97,21 @@ export const djangoAuthApi = {
       const validated = schemas.signUpSchema.parse(request);
 
       // Step 1: Register to get auth token
-      const { data: loginData } = await http.post<LoginResponse>('/auth/registration/', {
+      const registrationData: any = {
         username: validated.username,
         email: validated.email,
         password1: validated.password,
         password2: validated.password,
         first_name: validated.first_name,
         last_name: validated.last_name,
-      });
+      };
+
+      // Add phone if provided
+      if (validated.phone) {
+        registrationData.phone = validated.phone;
+      }
+
+      const { data: loginData } = await http.post<LoginResponse>('/auth/registration/', registrationData);
 
       // Validate login response
       const validatedLogin = schemas.loginResponseSchema.parse(loginData);
@@ -286,37 +293,5 @@ export const djangoAuthApi = {
       }
       throw normalizeAxiosError(error);
     }
-  },
-
-  /**
-   * Check if user is authenticated by checking stored token and validating with backend
-   */
-  async isAuthenticated(http: AxiosInstance): Promise<boolean> {
-    try {
-      const token = await authStorage.getAuthToken();
-      if (!token) return false;
-
-      // Validate token with backend
-      await this.getCurrentUser(http);
-      return true;
-    } catch {
-      // Clear invalid auth data
-      await authStorage.clearAll();
-      return false;
-    }
-  },
-
-  /**
-   * Get stored user data without API call
-   */
-  async getStoredUser(): Promise<User | null> {
-    return await authStorage.getUserData();
-  },
-
-  /**
-   * Get stored auth token
-   */
-  async getStoredToken(): Promise<string | null> {
-    return await authStorage.getAuthToken();
   },
 };

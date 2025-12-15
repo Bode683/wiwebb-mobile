@@ -84,6 +84,7 @@ export default function AuthScreen() {
         password,
         first_name: firstName,
         last_name: lastName,
+        phone: phone || undefined, // Only include if provided
       });
       // Success toast is handled by useAuth hook
       setActiveTab("signin");
@@ -258,6 +259,25 @@ export default function AuthScreen() {
                         />
                         <HelperText type="info" visible={true}>
                           Choose a unique username (min 3 characters)
+                        </HelperText>
+                      </View>
+
+                      {/* Phone Field */}
+                      <View style={styles.inputField}>
+                        <TextInput
+                          label="Phone (Optional)"
+                          mode="outlined"
+                          left={<TextInput.Icon icon="phone" />}
+                          onChangeText={setPhone}
+                          value={phone}
+                          placeholder="+1234567890"
+                          keyboardType="phone-pad"
+                          autoComplete="tel"
+                          disabled={isLoading}
+                          error={!!signUpError}
+                        />
+                        <HelperText type="info" visible={true}>
+                          Include country code (e.g., +1 for US)
                         </HelperText>
                       </View>
 
