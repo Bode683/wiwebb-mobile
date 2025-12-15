@@ -1,137 +1,87 @@
-import { queryKeys } from '@/api/queryKeys';
-import type { UpdateProfileRequest } from '@/api/types';
+import type { UpdateUserRequest } from '@/api/types';
 import { useApi } from '@/context/ApiContext';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 /**
  * Profile hook with TanStack Query
- * 
+ *
  * Provides:
- * - Query for fetching profile
- * - Mutations for updating, creating, deleting profile
- * - Avatar upload/delete
- * 
+ * - Profile data from ApiContext (no separate API call needed)
+ * - Mutations for updating profile and managing avatar
+ *
  * Usage:
- * const { profile, isLoading, updateProfile } = useProfile(userId);
+ * const { profile, isLoading, updateProfile } = useCurrentProfile();
  */
-export function useProfile(userId?: string) {
-  const { supabase, api } = useApi();
-  const queryClient = useQueryClient();
-
-  /**
-   * Fetch profile query
-   */
-  const profileQuery = useQuery({
-    queryKey: queryKeys.profiles.detail(userId!),
-    queryFn: async () => {
-      const profile = await api.profiles.getProfile(supabase, userId!);
-      return profile;
-    },
-    enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+export function useCurrentProfile() {
+  const { user, isAuthLoading, api, http, refreshAuth } = useApi();
 
   /**
    * Update profile mutation
+   * Updates the current user's profile and refreshes auth state
    */
   const updateMutation = useMutation({
-    mutationFn: (updates: UpdateProfileRequest) =>
-      api.profiles.updateProfile(supabase, userId!, updates),
-    onSuccess: (data) => {
-      // Optimistically update cache
-      queryClient.setQueryData(queryKeys.profiles.detail(userId!), data);
-    },
-  });
-
-  /**
-   * Create profile mutation
-   */
-  const createMutation = useMutation({
-    mutationFn: (profileData?: Partial<UpdateProfileRequest>) =>
-      api.profiles.createProfile(supabase, userId!, profileData),
-    onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.profiles.detail(userId!), data);
-    },
-  });
-
-  /**
-   * Delete profile mutation
-   */
-  const deleteMutation = useMutation({
-    mutationFn: () => api.profiles.deleteProfile(supabase, userId!),
-    onSuccess: () => {
-      queryClient.removeQueries({ queryKey: queryKeys.profiles.detail(userId!) });
+    mutationFn: (updates: UpdateUserRequest) =>
+      api.profiles.updateProfile(http, updates),
+    onSuccess: async () => {
+      // Refresh auth state to get updated user data
+      await refreshAuth();
     },
   });
 
   /**
    * Upload avatar mutation
+   * Uploads avatar image and refreshes auth state
    */
   const uploadAvatarMutation = useMutation({
-    mutationFn: ({ 
-      file, 
-      fileName, 
-      contentType 
-    }: { 
-      file: File | Blob | ArrayBuffer; 
-      fileName: string; 
+    mutationFn: ({
+      file,
+      fileName,
+      contentType
+    }: {
+      file: File | Blob;
+      fileName?: string;
       contentType?: string;
     }) =>
-      api.profiles.uploadAvatar(supabase, userId!, file, { fileName, contentType }),
-    onSuccess: (filePath) => {
-      // Update profile with new avatar file path
-      return updateMutation.mutateAsync({ avatar_url: filePath });
+      api.profiles.uploadAvatar(http, file, { fileName, contentType }),
+    onSuccess: async () => {
+      // Refresh auth state to get updated user data with new avatar
+      await refreshAuth();
     },
   });
 
   /**
    * Delete avatar mutation
+   * Removes avatar and refreshes auth state
    */
   const deleteAvatarMutation = useMutation({
-    mutationFn: (fileName: string) =>
-      api.profiles.deleteAvatar(supabase, userId!, fileName),
-    onSuccess: () => {
-      // Update profile to remove avatar URL
-      return updateMutation.mutateAsync({ avatar_url: undefined });
+    mutationFn: () =>
+      api.profiles.deleteAvatar(http),
+    onSuccess: async () => {
+      // Refresh auth state to get updated user data
+      await refreshAuth();
     },
   });
 
   return {
-    // Query data
-    profile: profileQuery.data,
-    isLoading: profileQuery.isLoading,
-    isError: profileQuery.isError,
-    error: profileQuery.error,
-    refetch: profileQuery.refetch,
+    // Profile data (from auth context)
+    profile: user,
+    isLoading: isAuthLoading,
+    isError: false,
+    error: null,
 
     // Mutations
     updateProfile: updateMutation.mutateAsync,
-    createProfile: createMutation.mutateAsync,
-    deleteProfile: deleteMutation.mutateAsync,
     uploadAvatar: uploadAvatarMutation.mutateAsync,
     deleteAvatar: deleteAvatarMutation.mutateAsync,
 
     // Mutation states
     isUpdating: updateMutation.isPending,
-    isCreating: createMutation.isPending,
-    isDeleting: deleteMutation.isPending,
     isUploadingAvatar: uploadAvatarMutation.isPending,
     isDeletingAvatar: deleteAvatarMutation.isPending,
 
     // Mutation errors
     updateError: updateMutation.error,
-    createError: createMutation.error,
-    deleteError: deleteMutation.error,
     uploadAvatarError: uploadAvatarMutation.error,
     deleteAvatarError: deleteAvatarMutation.error,
   };
-}
-
-/**
- * Hook for current user's profile
- * Convenience wrapper that uses current user ID from auth context
- */
-export function useCurrentProfile() {
-  const { user } = useApi();
-  return useProfile(user?.id);
 }

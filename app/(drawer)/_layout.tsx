@@ -15,7 +15,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
  */
 export default function DrawerLayout() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { user, session } = useApi();
+  const { user } = useApi();
   const { profile } = useCurrentProfile();
 
   const handleOpenDrawer = () => {
@@ -57,10 +57,8 @@ export default function DrawerLayout() {
           visible={isDrawerOpen}
           onClose={handleCloseDrawer}
           userEmail={user?.email}
-          userPhone={profile?.phone || session?.user?.phone || undefined}
-          userAvatarUrl={
-            profile?.avatar_url || session?.user?.user_metadata?.avatar_url
-          }
+          userPhone={profile?.phone_number || undefined}
+          userAvatarUrl={profile?.avatar || undefined}
         />
       </View>
     </SafeAreaProvider>

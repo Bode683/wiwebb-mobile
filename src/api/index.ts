@@ -14,6 +14,9 @@ export { djangoAuthApi } from './django-auth.api';
 // User Management (Admin)
 export { usersApi } from './users.api';
 
+// Profile Management
+export { profilesApi } from './profiles.api';
+
 // Wiwebb API Modules
 export { tenantsApi } from './tenants.api';
 export { hotspotsApi } from './hotspots.api';
