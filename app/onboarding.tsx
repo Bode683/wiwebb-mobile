@@ -214,14 +214,20 @@ const Pagination = ({ scrollX, theme }: { scrollX: SharedValue<number>; theme: a
       <View style={styles.footer}>
         <Pagination scrollX={scrollX} theme={theme} />
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: theme.colors.primary }]}
+          style={[
+            styles.button,
+            {
+              backgroundColor: theme.colors.primary,
+              shadowColor: theme.colors.shadow,
+            },
+          ]}
           onPress={handleNext}
           activeOpacity={0.8}
         >
-          <Text style={styles.buttonText}>
+          <Text style={[styles.buttonText, { color: theme.colors.onPrimary }]}>
             {currentIndex === slides.length - 1 ? 'Get Started' : 'Next'}
           </Text>
-          <Ionicons name="arrow-forward" size={20} color="#fff" style={styles.buttonIcon} />
+          <Ionicons name="arrow-forward" size={20} color={theme.colors.onPrimary} style={styles.buttonIcon} />
         </TouchableOpacity>
       </View>
     </View>
@@ -304,7 +310,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 30,
     width: '100%',
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -314,7 +319,6 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: '700',
   },

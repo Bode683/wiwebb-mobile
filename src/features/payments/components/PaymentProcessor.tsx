@@ -8,10 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, useTheme } from "react-native-paper";
+import { Button } from "react-native-paper";
 import { usePayment } from "../contexts/PaymentContext";
 import { PaymentMethod } from "../types";
 import { PaymentMethodSelector } from "./PaymentMethodSelector";
+import { useTheme } from "@/hooks/use-theme";
 
 interface PaymentProcessorProps {
   amount: number;
@@ -297,16 +298,16 @@ export function PaymentProcessor({
       transparent={true}
       onRequestClose={handleCancel}
     >
-      <View style={styles.modalContainer}>
+      <View style={[styles.modalContainer, { backgroundColor: theme.colors.overlay }]}>
         <View
           style={[
             styles.modalContent,
             { backgroundColor: theme.colors.surface },
           ]}
         >
-          <View style={styles.modalHeader}>
+          <View style={[styles.modalHeader, { borderBottomColor: theme.colors.border }]}>
             <Text
-              style={[styles.modalTitle, { color: theme.colors.onSurface }]}
+              style={[styles.modalTitle, { color: theme.colors.text }]}
             >
               {processingStatus === "idle"
                 ? "Payment"
@@ -342,7 +343,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
     borderTopLeftRadius: 16,
@@ -355,7 +355,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
   },
   modalTitle: {
     fontSize: 18,

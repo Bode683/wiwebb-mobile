@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Card, Text, useTheme, Badge, IconButton } from 'react-native-paper';
+import { Card, Text, Badge, IconButton } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { Hotspot } from '@/api/types';
+import { useTheme } from '@/hooks/use-theme';
 
 interface HotspotCardProps {
   hotspot: Hotspot;
@@ -23,14 +24,14 @@ export function HotspotCard({ hotspot, onPress, onEdit, onDelete }: HotspotCardP
             <MaterialCommunityIcons
               name="wifi"
               size={24}
-              color={isOnline ? '#10b981' : theme.colors.onSurfaceVariant}
+              color={isOnline ? theme.colors.success : theme.colors.textMuted}
             />
             <View style={styles.titleText}>
               <Text variant="titleMedium" style={styles.name}>
                 {hotspot.name}
               </Text>
               {hotspot.tenant_name && (
-                <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                <Text variant="bodySmall" style={{ color: theme.colors.textMuted }}>
                   {hotspot.tenant_name}
                 </Text>
               )}
@@ -40,14 +41,16 @@ export function HotspotCard({ hotspot, onPress, onEdit, onDelete }: HotspotCardP
             style={[
               styles.badge,
               {
-                backgroundColor: isOnline ? '#10b98120' : theme.colors.errorContainer,
+                backgroundColor: isOnline
+                  ? `${theme.colors.success}20`
+                  : `${theme.colors.error}20`,
               },
             ]}
           >
             <Text
               variant="labelSmall"
               style={{
-                color: isOnline ? '#10b981' : theme.colors.error,
+                color: isOnline ? theme.colors.success : theme.colors.error,
                 fontWeight: 'bold',
               }}
             >
@@ -61,7 +64,7 @@ export function HotspotCard({ hotspot, onPress, onEdit, onDelete }: HotspotCardP
             <MaterialCommunityIcons
               name="account-group"
               size={16}
-              color={theme.colors.onSurfaceVariant}
+              color={theme.colors.textMuted}
             />
             <Text variant="bodySmall" style={styles.statText}>
               {hotspot.clients} clients
@@ -72,7 +75,7 @@ export function HotspotCard({ hotspot, onPress, onEdit, onDelete }: HotspotCardP
               <MaterialCommunityIcons
                 name="speedometer"
                 size={16}
-                color={theme.colors.onSurfaceVariant}
+                color={theme.colors.textMuted}
               />
               <Text variant="bodySmall" style={styles.statText}>
                 {hotspot.bandwidth}
@@ -84,7 +87,7 @@ export function HotspotCard({ hotspot, onPress, onEdit, onDelete }: HotspotCardP
               <MaterialCommunityIcons
                 name="clock-outline"
                 size={16}
-                color={theme.colors.onSurfaceVariant}
+                color={theme.colors.textMuted}
               />
               <Text variant="bodySmall" style={styles.statText}>
                 {hotspot.uptime}
@@ -94,7 +97,7 @@ export function HotspotCard({ hotspot, onPress, onEdit, onDelete }: HotspotCardP
         </View>
 
         {hotspot.mac_address && (
-          <Text variant="bodySmall" style={[styles.macAddress, { color: theme.colors.onSurfaceVariant }]}>
+          <Text variant="bodySmall" style={[styles.macAddress, { color: theme.colors.textMuted }]}>
             MAC: {hotspot.mac_address}
           </Text>
         )}

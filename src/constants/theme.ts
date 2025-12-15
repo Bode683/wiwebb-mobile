@@ -33,7 +33,8 @@ export const Colors = {
     backgroundElevated: "#f9fafb",
     surface: "#f9fafb",
     accent: "#f0ab5c", // Lighter accent based on secondary
-    onPrimary: "#ffffff",
+    onPrimary: "#ffffff", // White text on colored buttons/surfaces
+    shadow: "#000000", // Shadow color for elevation
   },
   dark: {
     text: "#ECEDEE",
@@ -57,7 +58,8 @@ export const Colors = {
     backgroundElevated: "#0b1120",
     surface: "#1e293b",
     accent: "#db9f4d",
-    onPrimary: "#ffffff",
+    onPrimary: "#ffffff", // White text on colored buttons/surfaces
+    shadow: "#000000", // Shadow color for elevation
   },
 } as const;
 
@@ -215,3 +217,32 @@ export const navigationDarkTheme = {
     notification: Colors.dark.error,
   },
 } as const;
+
+/**
+ * Platform-specific shadow utility function
+ * Returns appropriate shadow styles for iOS and Android
+ */
+export function getShadow(
+  elevation: keyof typeof Elevation,
+  colorScheme: ColorScheme = "light"
+) {
+  const elevationValue = Elevation[elevation];
+  const shadowColor = Colors[colorScheme].shadow;
+
+  if (Platform.OS === "ios") {
+    return {
+      shadowColor,
+      shadowOffset: {
+        width: 0,
+        height: elevationValue / 2,
+      },
+      shadowOpacity: 0.1 + elevationValue * 0.02,
+      shadowRadius: elevationValue,
+    };
+  }
+
+  // Android
+  return {
+    elevation: elevationValue,
+  };
+}

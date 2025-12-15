@@ -1,9 +1,10 @@
 import React from "react";
 import { ScrollView, StyleSheet, View, RefreshControl } from "react-native";
-import { Text, ActivityIndicator, useTheme, Card, Divider, Chip } from "react-native-paper";
+import { Text, ActivityIndicator, Card, Divider, Chip } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useActiveSessions } from "@/hooks/useRadiusUsers";
+import { useTheme } from "@/hooks/use-theme";
 
 /**
  * Active Sessions Screen
@@ -101,8 +102,8 @@ export default function ActiveSessionsScreen() {
                   </View>
                   <Chip
                     mode="flat"
-                    style={{ backgroundColor: '#10b98120' }}
-                    textStyle={{ color: '#10b981', fontWeight: 'bold', fontSize: 11 }}
+                    style={{ backgroundColor: `${theme.colors.success}20` }}
+                    textStyle={{ color: theme.colors.success, fontWeight: 'bold', fontSize: 11 }}
                   >
                     ACTIVE
                   </Chip>

@@ -18,12 +18,6 @@ Subscription billing plans -> make sure the plans are well
 
 Change the colors to match wiwebb colors
 
-Payment Methods
-- add stripe
-- master card
-- samsung pay
-- Applepay
-- OM/Momo
 
 Make sure that role based access is enforced everywhere
 
@@ -37,4 +31,3 @@ django
 trafik
 
 
-season 3 spartacus-torrent9
