@@ -6,6 +6,7 @@ import {
   Modal,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -33,6 +34,7 @@ export function PaymentMethodSelector({
     loadPaymentMethods,
     setAsDefaultPaymentMethod,
     removePaymentMethod,
+    updatePaymentMethodDetails,
   } = usePayment();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -40,6 +42,8 @@ export function PaymentMethodSelector({
     selectedPaymentMethodId
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [editingMethod, setEditingMethod] = useState<PaymentMethod | null>(null);
+  const [editNickname, setEditNickname] = useState("");
 
   // Initialize with default payment method if none selected
   useEffect(() => {
@@ -142,6 +146,29 @@ export function PaymentMethodSelector({
         },
       ]
     );
+  };
+
+  // Handle editing payment method
+  const handleEditPaymentMethod = (paymentMethod: PaymentMethod) => {
+    setEditingMethod(paymentMethod);
+    setEditNickname(paymentMethod.nickname || "");
+  };
+
+  // Save edited payment method
+  const handleSaveEdit = async () => {
+    if (!editingMethod) return;
+
+    try {
+      await updatePaymentMethodDetails(editingMethod.id, {
+        nickname: editNickname.trim() || undefined,
+      });
+      setEditingMethod(null);
+      setEditNickname("");
+      Alert.alert("Success", "Payment method updated successfully");
+    } catch (error) {
+      console.error("Error updating payment method:", error);
+      Alert.alert("Error", "Failed to update payment method");
+    }
   };
 
   // Render the selected payment method in compact mode
@@ -299,6 +326,7 @@ export function PaymentMethodSelector({
                     paymentMethod={item}
                     isSelected={selectedId === item.id}
                     onSelect={() => handleSelectPaymentMethod(item)}
+                    onEdit={() => handleEditPaymentMethod(item)}
                     onSetDefault={() => handleSetDefault(item.id)}
                     onDelete={() => handleDeletePaymentMethod(item.id)}
                   />
@@ -332,12 +360,96 @@ export function PaymentMethodSelector({
     );
   };
 
+  // Render edit modal
+  const renderEditModal = () => {
+    if (!editingMethod) return null;
+
+    return (
+      <Modal
+        visible={!!editingMethod}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setEditingMethod(null)}
+      >
+        <View style={styles.modalContainer}>
+          <View
+            style={[
+              styles.editModalContent,
+              { backgroundColor: theme.colors.surface },
+            ]}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[styles.modalTitle, { color: theme.colors.onSurface }]}
+              >
+                Edit Payment Method
+              </Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setEditingMethod(null)}
+              >
+                <MaterialIcons
+                  name="close"
+                  size={24}
+                  color={theme.colors.onSurface}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.editContent}>
+              <Text
+                style={[
+                  styles.inputLabel,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                Nickname
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: theme.colors.surfaceVariant,
+                    color: theme.colors.onSurface,
+                    borderColor: theme.colors.outline,
+                  },
+                ]}
+                value={editNickname}
+                onChangeText={setEditNickname}
+                placeholder="Enter a nickname for this payment method"
+                placeholderTextColor={theme.colors.onSurfaceVariant}
+              />
+
+              <View style={styles.editActions}>
+                <Button
+                  mode="outlined"
+                  onPress={() => setEditingMethod(null)}
+                  style={styles.editActionButton}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  mode="contained"
+                  onPress={handleSaveEdit}
+                  style={styles.editActionButton}
+                >
+                  Save
+                </Button>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
   // If compact mode is requested, render the compact selector
   if (compact) {
     return (
       <View style={styles.container}>
         {renderCompactSelector()}
         {renderPaymentMethodModal()}
+        {renderEditModal()}
       </View>
     );
   }
@@ -383,6 +495,7 @@ export function PaymentMethodSelector({
               paymentMethod={item}
               isSelected={selectedId === item.id}
               onSelect={() => handleSelectPaymentMethod(item)}
+              onEdit={() => handleEditPaymentMethod(item)}
               onSetDefault={() => handleSetDefault(item.id)}
               onDelete={() => handleDeletePaymentMethod(item.id)}
             />
@@ -409,6 +522,7 @@ export function PaymentMethodSelector({
           Add Payment Method
         </Button>
       )}
+      {renderEditModal()}
     </View>
   );
 }
@@ -494,5 +608,34 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     padding: 4,
+  },
+  // Edit modal styles
+  editModalContent: {
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingBottom: 16,
+  },
+  editContent: {
+    padding: 16,
+  },
+  inputLabel: {
+    fontSize: 14,
+    marginBottom: 8,
+    fontWeight: "500",
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 16,
+  },
+  editActions: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 12,
+  },
+  editActionButton: {
+    minWidth: 100,
   },
 });

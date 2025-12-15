@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import { usePayment } from "../contexts/PaymentContext";
-import { NewPaymentMethodRequest, PaymentMethodType } from "../types";
+import { MobileMoneyProvider, NewPaymentMethodRequest, PaymentMethodType } from "../types";
 
 interface AddPaymentMethodProps {
   visible: boolean;
@@ -36,6 +36,9 @@ export function AddPaymentMethod({
   const [expiryYear, setExpiryYear] = useState("");
   const [cvc, setCvc] = useState("");
   const [cardholderName, setCardholderName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [mobileMoneyProvider, setMobileMoneyProvider] = useState<MobileMoneyProvider>("orange_money");
   const [setAsDefault, setSetAsDefault] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +51,9 @@ export function AddPaymentMethod({
     setExpiryYear("");
     setCvc("");
     setCardholderName("");
+    setNickname("");
+    setPhoneNumber("");
+    setMobileMoneyProvider("orange_money");
     setSetAsDefault(false);
     setError(null);
   };
@@ -72,7 +78,7 @@ export function AddPaymentMethod({
 
   // Validate form
   const validateForm = () => {
-    if (paymentType === "credit_card" || paymentType === "debit_card") {
+    if (paymentType === "credit_card" || paymentType === "debit_card" || paymentType === "stripe") {
       if (!cardNumber || cardNumber.replace(/\s+/g, "").length < 13) {
         setError("Please enter a valid card number");
         return false;
@@ -107,6 +113,18 @@ export function AddPaymentMethod({
       }
     }
 
+    if (paymentType === "mobile_money") {
+      if (!phoneNumber) {
+        setError("Please enter a phone number");
+        return false;
+      }
+      const phoneRegex = /^\+[1-9]\d{9,14}$/;
+      if (!phoneRegex.test(phoneNumber.replace(/\s/g, ""))) {
+        setError("Please enter a valid phone number (e.g., +237650123456)");
+        return false;
+      }
+    }
+
     setError(null);
     return true;
   };
@@ -121,14 +139,20 @@ export function AddPaymentMethod({
       const paymentMethodRequest: NewPaymentMethodRequest = {
         type: paymentType,
         setAsDefault,
+        nickname: nickname.trim() || undefined,
       };
 
-      if (paymentType === "credit_card" || paymentType === "debit_card") {
+      if (paymentType === "credit_card" || paymentType === "debit_card" || paymentType === "stripe") {
         paymentMethodRequest.cardNumber = cardNumber.replace(/\s+/g, "");
         paymentMethodRequest.expiryMonth = expiryMonth;
         paymentMethodRequest.expiryYear = expiryYear;
         paymentMethodRequest.cvc = cvc;
         paymentMethodRequest.cardholderName = cardholderName;
+      }
+
+      if (paymentType === "mobile_money") {
+        paymentMethodRequest.mobileMoneyProvider = mobileMoneyProvider;
+        paymentMethodRequest.phoneNumber = phoneNumber.replace(/\s/g, "");
       }
 
       await addNewPaymentMethod(paymentMethodRequest);
@@ -159,9 +183,12 @@ export function AddPaymentMethod({
   }[] = [
     { value: "credit_card", label: "Credit Card", icon: "credit-card" },
     { value: "debit_card", label: "Debit Card", icon: "credit-card" },
+    { value: "stripe", label: "Stripe", icon: "credit-card" },
     { value: "paypal", label: "PayPal", icon: "payment" },
     { value: "google_pay", label: "Google Pay", icon: "android" },
     { value: "apple_pay", label: "Apple Pay", icon: "phone-iphone" },
+    { value: "samsung_pay", label: "Samsung Pay", icon: "phone-android" },
+    { value: "mobile_money", label: "Mobile Money", icon: "smartphone" },
   ];
 
   return (
@@ -252,9 +279,32 @@ export function AddPaymentMethod({
               ))}
             </View>
 
-            {/* Credit/Debit Card Form */}
+            {/* Nickname field (optional, for all types) */}
+            <Text
+              style={[styles.inputLabel, { color: theme.colors.onSurfaceVariant }]}
+            >
+              Nickname (Optional)
+            </Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: theme.colors.surfaceVariant,
+                  color: theme.colors.onSurface,
+                  borderColor: theme.colors.outline,
+                },
+              ]}
+              value={nickname}
+              onChangeText={setNickname}
+              placeholder="e.g., My Personal Card, Work Card"
+              placeholderTextColor={theme.colors.onSurfaceVariant}
+              editable={!isSubmitting}
+            />
+
+            {/* Credit/Debit/Stripe Card Form */}
             {(paymentType === "credit_card" ||
-              paymentType === "debit_card") && (
+              paymentType === "debit_card" ||
+              paymentType === "stripe") && (
               <View style={styles.cardForm}>
                 <Text
                   style={[
@@ -394,10 +444,111 @@ export function AddPaymentMethod({
               </View>
             )}
 
+            {/* Mobile Money Form */}
+            {paymentType === "mobile_money" && (
+              <View style={styles.mobileMoneyForm}>
+                <Text
+                  style={[styles.sectionTitle, { color: theme.colors.onSurface }]}
+                >
+                  Provider
+                </Text>
+                <View style={styles.providerContainer}>
+                  <TouchableOpacity
+                    style={[
+                      styles.providerOption,
+                      {
+                        backgroundColor:
+                          mobileMoneyProvider === "orange_money"
+                            ? theme.colors.primaryContainer
+                            : theme.colors.surfaceVariant,
+                        borderColor:
+                          mobileMoneyProvider === "orange_money"
+                            ? theme.colors.primary
+                            : theme.colors.surfaceVariant,
+                      },
+                    ]}
+                    onPress={() => setMobileMoneyProvider("orange_money")}
+                    disabled={isSubmitting}
+                  >
+                    <Text
+                      style={[
+                        styles.providerLabel,
+                        {
+                          color:
+                            mobileMoneyProvider === "orange_money"
+                              ? theme.colors.primary
+                              : theme.colors.onSurfaceVariant,
+                        },
+                      ]}
+                    >
+                      Orange Money
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.providerOption,
+                      {
+                        backgroundColor:
+                          mobileMoneyProvider === "mtn_momo"
+                            ? theme.colors.primaryContainer
+                            : theme.colors.surfaceVariant,
+                        borderColor:
+                          mobileMoneyProvider === "mtn_momo"
+                            ? theme.colors.primary
+                            : theme.colors.surfaceVariant,
+                      },
+                    ]}
+                    onPress={() => setMobileMoneyProvider("mtn_momo")}
+                    disabled={isSubmitting}
+                  >
+                    <Text
+                      style={[
+                        styles.providerLabel,
+                        {
+                          color:
+                            mobileMoneyProvider === "mtn_momo"
+                              ? theme.colors.primary
+                              : theme.colors.onSurfaceVariant,
+                        },
+                      ]}
+                    >
+                      MTN Mobile Money
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    { color: theme.colors.onSurfaceVariant },
+                  ]}
+                >
+                  Phone Number
+                </Text>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: theme.colors.surfaceVariant,
+                      color: theme.colors.onSurface,
+                      borderColor: theme.colors.outline,
+                    },
+                  ]}
+                  value={phoneNumber}
+                  onChangeText={setPhoneNumber}
+                  placeholder="+237650123456"
+                  placeholderTextColor={theme.colors.onSurfaceVariant}
+                  keyboardType="phone-pad"
+                  editable={!isSubmitting}
+                />
+              </View>
+            )}
+
             {/* Digital Wallet Message */}
             {(paymentType === "paypal" ||
               paymentType === "google_pay" ||
-              paymentType === "apple_pay") && (
+              paymentType === "apple_pay" ||
+              paymentType === "samsung_pay") && (
               <View style={styles.walletMessage}>
                 <MaterialIcons
                   name={
@@ -405,7 +556,9 @@ export function AddPaymentMethod({
                       ? "payment"
                       : paymentType === "google_pay"
                       ? "android"
-                      : "phone-iphone"
+                      : paymentType === "apple_pay"
+                      ? "phone-iphone"
+                      : "phone-android"
                   }
                   size={48}
                   color={theme.colors.primary}
@@ -418,7 +571,9 @@ export function AddPaymentMethod({
                     ? "You will be redirected to PayPal to complete setup."
                     : paymentType === "google_pay"
                     ? "You will be redirected to Google Pay to complete setup."
-                    : "You will be redirected to Apple Pay to complete setup."}
+                    : paymentType === "apple_pay"
+                    ? "You will be redirected to Apple Pay to complete setup."
+                    : "You will be redirected to Samsung Pay to complete setup."}
                 </Text>
                 <Text
                   style={[
@@ -534,6 +689,25 @@ const styles = StyleSheet.create({
   },
   cardForm: {
     marginBottom: 16,
+  },
+  mobileMoneyForm: {
+    marginBottom: 16,
+  },
+  providerContainer: {
+    flexDirection: "row",
+    marginBottom: 16,
+    gap: 8,
+  },
+  providerOption: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: "center",
+  },
+  providerLabel: {
+    fontSize: 14,
+    fontWeight: "500",
   },
   inputLabel: {
     fontSize: 14,

@@ -12,7 +12,9 @@ import {
   getPaymentMethods,
   getTransactionHistory,
   processPayment,
+  reorderPaymentMethods,
   setDefaultPaymentMethod,
+  updatePaymentMethod,
 } from "../api";
 import {
   NewPaymentMethodRequest,
@@ -27,6 +29,7 @@ type PaymentAction =
   | { type: "SET_PAYMENT_METHODS"; payload: PaymentMethod[] }
   | { type: "SET_DEFAULT_PAYMENT_METHOD_ID"; payload: string | null }
   | { type: "ADD_PAYMENT_METHOD"; payload: PaymentMethod }
+  | { type: "UPDATE_PAYMENT_METHOD"; payload: PaymentMethod }
   | { type: "REMOVE_PAYMENT_METHOD"; payload: string }
   | { type: "SET_TRANSACTIONS"; payload: Transaction[] }
   | { type: "ADD_TRANSACTION"; payload: Transaction }
@@ -59,6 +62,13 @@ function paymentReducer(
         defaultPaymentMethodId: action.payload.isDefault
           ? action.payload.id
           : state.defaultPaymentMethodId,
+      };
+    case "UPDATE_PAYMENT_METHOD":
+      return {
+        ...state,
+        paymentMethods: state.paymentMethods.map((pm) =>
+          pm.id === action.payload.id ? action.payload : pm
+        ),
       };
     case "REMOVE_PAYMENT_METHOD":
       return {
@@ -97,6 +107,11 @@ interface PaymentContextType {
   addNewPaymentMethod: (
     paymentMethodData: NewPaymentMethodRequest
   ) => Promise<PaymentMethod>;
+  updatePaymentMethodDetails: (
+    paymentMethodId: string,
+    updates: Partial<Pick<PaymentMethod, 'nickname' | 'displayOrder'>>
+  ) => Promise<PaymentMethod>;
+  reorderPaymentMethodsList: (orderedIds: string[]) => Promise<boolean>;
   setAsDefaultPaymentMethod: (paymentMethodId: string) => Promise<boolean>;
   removePaymentMethod: (paymentMethodId: string) => Promise<boolean>;
   loadTransactionHistory: (
@@ -181,6 +196,60 @@ export function PaymentProvider({ children }: PaymentProviderProps) {
       console.error("Error adding payment method:", error);
       dispatch({ type: "SET_ERROR", payload: errorMessage });
       throw error;
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
+    }
+  };
+
+  // Update payment method details (e.g., nickname)
+  const updatePaymentMethodDetails = async (
+    paymentMethodId: string,
+    updates: Partial<Pick<PaymentMethod, 'nickname' | 'displayOrder'>>
+  ): Promise<PaymentMethod> => {
+    try {
+      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({ type: "SET_ERROR", payload: null });
+
+      const updatedMethod = await updatePaymentMethod(paymentMethodId, updates);
+
+      // Update local state
+      dispatch({ type: "UPDATE_PAYMENT_METHOD", payload: updatedMethod });
+
+      return updatedMethod;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to update payment method";
+      console.error("Error updating payment method:", error);
+      dispatch({ type: "SET_ERROR", payload: errorMessage });
+      throw error;
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
+    }
+  };
+
+  // Reorder payment methods
+  const reorderPaymentMethodsList = async (
+    orderedIds: string[]
+  ): Promise<boolean> => {
+    try {
+      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({ type: "SET_ERROR", payload: null });
+
+      const success = await reorderPaymentMethods(orderedIds);
+
+      if (success) {
+        // Reload payment methods to get updated order
+        await loadPaymentMethods();
+      }
+
+      return success;
+    } catch (error) {
+      console.error("Error reordering payment methods:", error);
+      dispatch({
+        type: "SET_ERROR",
+        payload: "Failed to reorder payment methods",
+      });
+      return false;
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
@@ -368,6 +437,8 @@ export function PaymentProvider({ children }: PaymentProviderProps) {
     dispatch,
     loadPaymentMethods,
     addNewPaymentMethod,
+    updatePaymentMethodDetails,
+    reorderPaymentMethodsList,
     setAsDefaultPaymentMethod,
     removePaymentMethod,
     loadTransactionHistory,

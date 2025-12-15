@@ -1,13 +1,23 @@
 /**
  * Payment method types
  */
-export type PaymentMethodType = 
-  | 'credit_card' 
-  | 'debit_card' 
-  | 'paypal' 
-  | 'apple_pay' 
-  | 'google_pay' 
+export type PaymentMethodType =
+  | 'credit_card'
+  | 'debit_card'
+  | 'paypal'
+  | 'apple_pay'
+  | 'google_pay'
+  | 'samsung_pay'
+  | 'stripe'
+  | 'mobile_money'
   | 'cash';
+
+/**
+ * Mobile money provider types
+ */
+export type MobileMoneyProvider =
+  | 'orange_money'
+  | 'mtn_momo';
 
 /**
  * Card brand types
@@ -31,20 +41,29 @@ export interface PaymentMethod {
   isDefault: boolean;
   createdAt: string;
   updatedAt: string;
-  
+  nickname?: string;
+  displayOrder?: number;
+
   // Card specific fields
   cardBrand?: CardBrand;
   lastFour?: string;
   expiryMonth?: string;
   expiryYear?: string;
   cardholderName?: string;
-  
+
   // PayPal specific fields
   email?: string;
-  
+
   // Digital wallet specific fields
   walletName?: string;
   deviceName?: string;
+
+  // Stripe specific fields
+  stripeMethodId?: string;
+
+  // Mobile money specific fields
+  mobileMoneyProvider?: MobileMoneyProvider;
+  phoneNumber?: string;
 }
 
 /**
@@ -86,6 +105,11 @@ export interface NewPaymentMethodRequest {
   cvc?: string;
   cardholderName?: string;
   setAsDefault?: boolean;
+  nickname?: string;
+
+  // Mobile money specific fields
+  mobileMoneyProvider?: MobileMoneyProvider;
+  phoneNumber?: string;
 }
 
 /**
