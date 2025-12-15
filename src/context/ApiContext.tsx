@@ -11,6 +11,7 @@ import { hotspotsApi } from '@/api/hotspots.api';
 import { radiusApi } from '@/api/radius.api';
 import { subscriptionsApi } from '@/api/subscriptions.api';
 import { paymentsApi } from '@/api/payments.api';
+import { profilesApi } from '@/api/profiles.api';
 import type { User } from '@/api/types';
 
 /**
@@ -52,6 +53,7 @@ interface ApiContextValue {
     radius: typeof radiusApi;
     subscriptions: typeof subscriptionsApi;
     payments: typeof paymentsApi;
+    profiles: typeof profilesApi;
   };
 
   // Auth state (managed by context)
@@ -171,6 +173,7 @@ export function ApiProvider({ children }: ApiProviderProps) {
       radius: radiusApi,
       subscriptions: subscriptionsApi,
       payments: paymentsApi,
+      profiles: profilesApi,
     },
     user,
     isAuthenticated: !!user,
