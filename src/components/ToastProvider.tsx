@@ -1,14 +1,109 @@
 import React from 'react';
-import Toast, { ToastShowParams } from 'react-native-toast-message';
+import { StyleSheet } from 'react-native';
+import Toast, { ToastShowParams, BaseToast, ErrorToast, InfoToast } from 'react-native-toast-message';
+import { useColorScheme } from 'react-native';
+import { Colors } from '../constants/theme';
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const colorScheme = useColorScheme() ?? 'light';
+  const colors = Colors[colorScheme];
+
+  const toastConfig = {
+    success: (props: any) => (
+      <BaseToast
+        {...props}
+        style={[
+          styles.toastBase,
+          {
+            borderLeftColor: colors.success,
+            backgroundColor: colors.card,
+          }
+        ]}
+        contentContainerStyle={styles.contentContainer}
+        text1Style={[styles.text1, { color: colors.text }]}
+        text2Style={[styles.text2, { color: colors.textMuted }]}
+        text2NumberOfLines={2}
+      />
+    ),
+    error: (props: any) => (
+      <ErrorToast
+        {...props}
+        style={[
+          styles.toastBase,
+          {
+            borderLeftColor: colors.error,
+            backgroundColor: colors.card,
+          }
+        ]}
+        contentContainerStyle={styles.contentContainer}
+        text1Style={[styles.text1, { color: colors.text }]}
+        text2Style={[styles.text2, { color: colors.textMuted }]}
+        text2NumberOfLines={2}
+      />
+    ),
+    info: (props: any) => (
+      <InfoToast
+        {...props}
+        style={[
+          styles.toastBase,
+          {
+            borderLeftColor: colors.primary,
+            backgroundColor: colors.card,
+          }
+        ]}
+        contentContainerStyle={styles.contentContainer}
+        text1Style={[styles.text1, { color: colors.text }]}
+        text2Style={[styles.text2, { color: colors.textMuted }]}
+        text2NumberOfLines={2}
+      />
+    ),
+    warning: (props: any) => (
+      <BaseToast
+        {...props}
+        style={[
+          styles.toastBase,
+          {
+            borderLeftColor: colors.warning,
+            backgroundColor: colors.card,
+          }
+        ]}
+        contentContainerStyle={styles.contentContainer}
+        text1Style={[styles.text1, { color: colors.text }]}
+        text2Style={[styles.text2, { color: colors.textMuted }]}
+        text2NumberOfLines={2}
+      />
+    ),
+  };
+
   return (
     <>
       {children}
-      <Toast />
+      <Toast config={toastConfig} />
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  toastBase: {
+    borderLeftWidth: 5,
+    borderRadius: 8,
+    height: undefined,
+    minHeight: 60,
+    paddingVertical: 12,
+  },
+  contentContainer: {
+    paddingHorizontal: 15,
+  },
+  text1: {
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  text2: {
+    fontSize: 13,
+    fontWeight: '400',
+  },
+});
 
 /**
  * Toast notification utility

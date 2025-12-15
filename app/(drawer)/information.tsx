@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
-import { showToast } from "@/components/ToastProvider";
+import { toast } from "@/components/ToastProvider";
 
 import React from "react";
 import { Linking, ScrollView, StyleSheet, View } from "react-native";
@@ -14,7 +14,7 @@ export default function InformationScreen() {
 
   const handleLinkPress = (url: string) => {
     Linking.openURL(url).catch(() => {
-      showToast("error", "Could not open link");
+      toast.error("Link Error", "Could not open link");
     });
   };
 

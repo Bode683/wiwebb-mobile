@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
-import { showToast } from "@/components/ToastProvider";
+import { toast } from "@/components/ToastProvider";
 
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -34,7 +34,7 @@ export default function SafetyScreen() {
               mode="contained"
               buttonColor="#0a7ea4"
               textColor="#FFFFFF"
-              onPress={() => showToast("info", "Security features enabled")}
+              onPress={() => toast.info("Security Status", "Security features enabled")}
             >
               Security Status
             </Button>
@@ -49,7 +49,7 @@ export default function SafetyScreen() {
             title="Encryption Protection"
             description="All your WiFi connections use end-to-end encryption"
             left={(props) => <List.Icon {...props} icon="lock" />}
-            onPress={() => showToast("info", "Encryption is enabled on all connections")}
+            onPress={() => toast.info("Encryption", "Encryption is enabled on all connections")}
             style={styles.listItem}
           />
 
@@ -57,7 +57,7 @@ export default function SafetyScreen() {
             title="Network Verification"
             description="Verify network authenticity to avoid connecting to unsafe networks"
             left={(props) => <List.Icon {...props} icon="check-circle" />}
-            onPress={() => showToast("info", "Always check network security settings")}
+            onPress={() => toast.info("Network Security", "Always check network security settings")}
             style={styles.listItem}
           />
 
@@ -66,7 +66,7 @@ export default function SafetyScreen() {
             description="Manage what data is shared and visible on public networks"
             left={(props) => <List.Icon {...props} icon="shield-check" />}
             onPress={() =>
-              showToast("info", "Data protection settings available in preferences")
+              toast.info("Data Protection", "Data protection settings available in preferences")
             }
             style={styles.listItem}
           />
@@ -130,8 +130,8 @@ export default function SafetyScreen() {
           <Button
             mode="outlined"
             onPress={() =>
-              showToast(
-                "info",
+              toast.info(
+                "Guidelines",
                 "Usage guidelines would open in a full view"
               )
             }

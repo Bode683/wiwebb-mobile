@@ -19,7 +19,7 @@ import {
   Divider,
 } from "react-native-paper";
 import { Link } from "expo-router";
-import { showToast } from "@/components/ToastProvider";
+import { toast } from "@/components/ToastProvider";
 import { getUserFriendlyMessage } from "@/api/errors";
 import { ThemedText } from "@/components/themed-text";
 
@@ -67,13 +67,13 @@ export default function AuthScreen() {
       await signIn({ email, password });
       // Navigation is handled automatically by auth state listener in app/_layout.tsx
     } catch (error) {
-      showToast("error", "Sign In Failed", getUserFriendlyMessage(error));
+      toast.error("Sign In Failed", getUserFriendlyMessage(error));
     }
   }
 
   async function handleSignUp() {
     if (!passwordsMatch) {
-      showToast("error", "Passwords do not match");
+      toast.error("Validation Error", "Passwords do not match");
       return;
     }
 
@@ -96,20 +96,19 @@ export default function AuthScreen() {
 
   async function handleResetPassword() {
     if (!email) {
-      showToast("error", "Please enter your email address");
+      toast.error("Validation Error", "Please enter your email address");
       return;
     }
 
     try {
       await resetPassword({ email });
-      showToast(
-        "success",
+      toast.success(
+        "Email Sent",
         "Password reset email sent. Please check your inbox."
       );
       setShowResetPassword(false);
     } catch (error) {
-      showToast(
-        "error",
+      toast.error(
         "Password Reset Failed",
         getUserFriendlyMessage(error)
       );
@@ -117,7 +116,7 @@ export default function AuthScreen() {
   }
 
   function handleSocialLogin(provider: string) {
-    showToast("info", `${provider} login coming soon`);
+    toast.info("Coming Soon", `${provider} login coming soon`);
   }
 
   return (

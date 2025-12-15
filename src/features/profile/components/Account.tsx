@@ -1,4 +1,4 @@
-import { showToast } from "@/components/ToastProvider";
+import { toast, toastMessages } from "@/components/ToastProvider";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/hooks/useAuth";
 import { useCurrentProfile } from "@/hooks/useProfile";
@@ -41,11 +41,9 @@ export default function Account() {
         phone,
         avatar_url: avatarUrl,
       })
-      showToast('success', 'Profile updated successfully!')
+      toastMessages.auth.profileUpdated()
     } catch (error) {
-      if (error instanceof Error) {
-        showToast('error', 'Profile Update Failed', error.message)
-      }
+      toast.error('Profile Update Failed', error instanceof Error ? error.message : 'Failed to update profile')
     }
   }
 
@@ -53,9 +51,7 @@ export default function Account() {
     try {
       await signOut()
     } catch (error) {
-      if (error instanceof Error) {
-        showToast('error', 'Sign Out Failed', error.message)
-      }
+      toast.error('Sign Out Failed', error instanceof Error ? error.message : 'Failed to sign out')
     }
   }
 

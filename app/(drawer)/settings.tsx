@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
-import { showToast } from "@/components/ToastProvider";
+import { toast } from "@/components/ToastProvider";
 import { useTheme } from "@/hooks/use-theme";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -24,18 +24,18 @@ export default function SettingsScreen() {
     switch (setting) {
       case "notifications":
         setNotificationsEnabled(value);
-        showToast("info", `Notifications ${value ? "enabled" : "disabled"}`);
+        toast.info("Notifications", `Notifications ${value ? "enabled" : "disabled"}`);
         break;
       case "location":
         setLocationEnabled(value);
-        showToast(
-          "info",
+        toast.info(
+          "Location Services",
           `Location services ${value ? "enabled" : "disabled"}`
         );
         break;
       case "darkMode":
         setDarkMode(value);
-        showToast("info", `Dark mode ${value ? "enabled" : "disabled"}`);
+        toast.info("Theme", `Dark mode ${value ? "enabled" : "disabled"}`);
         break;
     }
   };
@@ -123,7 +123,7 @@ export default function SettingsScreen() {
               <List.Icon {...props} icon="delete" color={theme.colors.error} />
             )}
             onPress={() =>
-              showToast("info", "This feature is not available in the MVP")
+              toast.info("Coming Soon", "This feature is not available in the MVP")
             }
           />
         </List.Section>

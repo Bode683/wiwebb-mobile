@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
-import { showToast } from "@/components/ToastProvider";
+import { toast } from "@/components/ToastProvider";
 
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -26,7 +26,7 @@ export default function SupportScreen() {
 
   const handleSubmit = async () => {
     if (!subject || !message) {
-      showToast("error", "Please fill out all fields");
+      toast.error("Validation Error", "Please fill out all fields");
       return;
     }
 
@@ -34,11 +34,11 @@ export default function SupportScreen() {
       setIsSubmitting(true);
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      showToast("success", "Your message has been sent");
+      toast.success("Message Sent", "Your message has been sent");
       setSubject("");
       setMessage("");
     } catch {
-      showToast("error", "Failed to send message");
+      toast.error("Send Failed", "Failed to send message");
     } finally {
       setIsSubmitting(false);
     }
@@ -102,8 +102,8 @@ export default function SupportScreen() {
             <Button
               mode="contained"
               onPress={() =>
-                showToast(
-                  "info",
+                toast.info(
+                  "Support Requested",
                   "Support team will assist you shortly"
                 )
               }

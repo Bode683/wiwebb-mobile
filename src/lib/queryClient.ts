@@ -1,6 +1,6 @@
 import { QueryClient, QueryCache, MutationCache } from '@tanstack/react-query';
 import { isApiError, getUserFriendlyMessage } from '@/api/errors';
-import { showToast } from '@/components/ToastProvider';
+import { toast } from '@/components/ToastProvider';
 
 /**
  * Global error handler for queries
@@ -10,9 +10,9 @@ function handleQueryError(error: unknown) {
   if (__DEV__) {
     console.error('Query Error:', error);
   }
-  
+
   const message = getUserFriendlyMessage(error);
-  showToast('error', 'Query Error', message);
+  toast.error('Query Error', message);
 }
 
 /**
@@ -22,9 +22,9 @@ function handleMutationError(error: unknown) {
   if (__DEV__) {
     console.error('Mutation Error:', error);
   }
-  
+
   const message = getUserFriendlyMessage(error);
-  showToast('error', 'Mutation Error', message);
+  toast.error('Mutation Error', message);
 }
 
 /**

@@ -95,7 +95,7 @@ function RootNavigator() {
   const segments = useSegments();
 
   // Get auth state from ApiContext (managed by Django auth)
-  const { user, isAuthenticated, isAuthLoading } = useAuthState();
+  const { isAuthenticated, isAuthLoading } = useAuthState();
 
   useEffect(() => {
     async function prepare() {

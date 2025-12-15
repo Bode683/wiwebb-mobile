@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { useHotspots, useDeleteHotspot } from "@/hooks/useHotspots";
 import { useAuthState } from "@/context/ApiContext";
 import { HotspotCard } from "@/components/wiwebb/HotspotCard";
-import Toast from "react-native-toast-message";
+import { toast } from "@/components/ToastProvider";
 
 /**
  * Hotspots Screen
@@ -33,17 +33,9 @@ export default function HotspotsScreen() {
   const handleDelete = async (id: number, name: string) => {
     try {
       await deleteHotspot.mutateAsync(id);
-      Toast.show({
-        type: 'success',
-        text1: 'Hotspot Deleted',
-        text2: `${name} has been removed`,
-      });
+      toast.success('Hotspot Deleted', `${name} has been removed`);
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Delete Failed',
-        text2: error instanceof Error ? error.message : 'Unknown error',
-      });
+      toast.error('Delete Failed', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 
@@ -151,11 +143,7 @@ export default function HotspotsScreen() {
         icon="plus"
         style={[styles.fab, { backgroundColor: theme.colors.primary }]}
         onPress={() => {
-          Toast.show({
-            type: 'info',
-            text1: 'Coming Soon',
-            text2: 'Add hotspot functionality will be implemented',
-          });
+          toast.info('Coming Soon', 'Add hotspot functionality will be implemented');
         }}
       />
     </SafeAreaView>
