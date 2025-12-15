@@ -16,6 +16,46 @@ import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
 import "react-native-reanimated";
+import { Colors } from "@/constants/theme";
+
+// Custom Paper themes merged with brand colors
+const customLightTheme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: Colors.light.primary,
+    secondary: Colors.light.secondary,
+    error: Colors.light.error,
+    background: Colors.light.background,
+    surface: Colors.light.surface,
+    onPrimary: Colors.light.onPrimary,
+    onSecondary: Colors.light.text,
+    onSurface: Colors.light.text,
+    onBackground: Colors.light.text,
+    outline: Colors.light.border,
+    surfaceVariant: Colors.light.muted,
+    onSurfaceVariant: Colors.light.textMuted,
+  },
+};
+
+const customDarkTheme = {
+  ...MD3DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    primary: Colors.dark.primary,
+    secondary: Colors.dark.secondary,
+    error: Colors.dark.error,
+    background: Colors.dark.background,
+    surface: Colors.dark.surface,
+    onPrimary: Colors.dark.onPrimary,
+    onSecondary: Colors.dark.text,
+    onSurface: Colors.dark.text,
+    onBackground: Colors.dark.text,
+    outline: Colors.dark.border,
+    surfaceVariant: Colors.dark.muted,
+    onSurfaceVariant: Colors.dark.textMuted,
+  },
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -25,7 +65,7 @@ export default function RootLayout() {
       <ApiProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <PaperProvider
-            theme={colorScheme === "dark" ? MD3DarkTheme : MD3LightTheme}
+            theme={colorScheme === "dark" ? customDarkTheme : customLightTheme}
           >
             <ThemeProvider
               value={colorScheme === "dark" ? DarkTheme : DefaultTheme}

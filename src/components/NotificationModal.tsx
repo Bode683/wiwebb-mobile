@@ -153,6 +153,7 @@ export function NotificationModal({
           style={[
             styles.modalContent,
             {
+              shadowColor: theme.colors.shadow,
               backgroundColor: theme.colors.background,
               maxHeight: modalMaxHeight,
               minHeight: minHeight,
@@ -295,7 +296,6 @@ const styles = StyleSheet.create({
     width: "100%",
     zIndex: 1000,
     elevation: 8,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.25,
     shadowRadius: 8,

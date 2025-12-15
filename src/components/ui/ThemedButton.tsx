@@ -26,18 +26,21 @@ export function ThemedButton({
       style={[
         styles.button,
         { backgroundColor: theme.colors.primary },
-        disabled && { backgroundColor: theme.colors.disabled },
+        disabled && {
+          backgroundColor: theme.colors.primary,
+          opacity: theme.opacity.disabled,
+        },
         style,
       ]}
       onPress={onPress}
       disabled={disabled || loading}
     >
       {loading ? (
-        <ActivityIndicator color={theme.colors.buttonText} />
+        <ActivityIndicator color={theme.colors.onPrimary} />
       ) : (
         <Text style={[
           styles.buttonText,
-          { color: theme.colors.buttonText },
+          { color: theme.colors.onPrimary },
           textStyle,
         ]}>
           {title}

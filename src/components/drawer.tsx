@@ -113,6 +113,7 @@ export function Drawer({
           style={[
             styles.drawer,
             {
+              shadowColor: theme.colors.shadow,
               width: DRAWER_WIDTH,
               backgroundColor: theme.colors.background,
               paddingTop: insets.top,
@@ -278,7 +279,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     zIndex: 2000,
-    shadowColor: "#000",
     shadowOffset: { width: 2, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 8,

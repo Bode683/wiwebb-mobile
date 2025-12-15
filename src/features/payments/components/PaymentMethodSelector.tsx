@@ -10,10 +10,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ActivityIndicator, Button, useTheme } from "react-native-paper";
+import { ActivityIndicator, Button } from "react-native-paper";
 import { usePayment } from "../contexts/PaymentContext";
 import { PaymentMethod } from "../types";
 import { PaymentMethodCard } from "./PaymentMethodCard";
+import { useTheme } from "@/hooks/use-theme";
 
 interface PaymentMethodSelectorProps {
   onSelectPaymentMethod?: (paymentMethod: PaymentMethod) => void;
@@ -248,16 +249,16 @@ export function PaymentMethodSelector({
         transparent={true}
         onRequestClose={() => setIsModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
+        <View style={[styles.modalContainer, { backgroundColor: theme.colors.overlay }]}>
           <View
             style={[
               styles.modalContent,
               { backgroundColor: theme.colors.surface },
             ]}
           >
-            <View style={styles.modalHeader}>
+            <View style={[styles.modalHeader, { borderBottomColor: theme.colors.border }]}>
               <Text
-                style={[styles.modalTitle, { color: theme.colors.onSurface }]}
+                style={[styles.modalTitle, { color: theme.colors.text }]}
               >
                 Select Payment Method
               </Text>
@@ -371,16 +372,16 @@ export function PaymentMethodSelector({
         transparent={true}
         onRequestClose={() => setEditingMethod(null)}
       >
-        <View style={styles.modalContainer}>
+        <View style={[styles.modalContainer, { backgroundColor: theme.colors.overlay }]}>
           <View
             style={[
               styles.editModalContent,
               { backgroundColor: theme.colors.surface },
             ]}
           >
-            <View style={styles.modalHeader}>
+            <View style={[styles.modalHeader, { borderBottomColor: theme.colors.border }]}>
               <Text
-                style={[styles.modalTitle, { color: theme.colors.onSurface }]}
+                style={[styles.modalTitle, { color: theme.colors.text }]}
               >
                 Edit Payment Method
               </Text>
@@ -587,7 +588,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
     borderTopLeftRadius: 16,
@@ -600,7 +600,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
   },
   modalTitle: {
     fontSize: 18,

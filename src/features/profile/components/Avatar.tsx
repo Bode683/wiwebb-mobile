@@ -256,7 +256,7 @@ export default function Avatar({
         )}
 
         {editable && (
-          <View style={styles.editOverlay}>
+          <View style={[styles.editOverlay, { backgroundColor: theme.colors.overlay }]}>
             <IconButton
               icon="camera"
               size={24}
@@ -351,7 +351,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "rgba(0,0,0,0.4)",
     height: "30%",
     justifyContent: "center",
     alignItems: "center",

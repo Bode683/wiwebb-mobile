@@ -10,9 +10,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, useTheme } from "react-native-paper";
+import { Button } from "react-native-paper";
 import { usePayment } from "../contexts/PaymentContext";
 import { MobileMoneyProvider, NewPaymentMethodRequest, PaymentMethodType } from "../types";
+import { useTheme } from "@/hooks/use-theme";
 
 interface AddPaymentMethodProps {
   visible: boolean;
@@ -198,16 +199,16 @@ export function AddPaymentMethod({
       transparent={true}
       onRequestClose={handleClose}
     >
-      <View style={styles.modalContainer}>
+      <View style={[styles.modalContainer, { backgroundColor: theme.colors.overlay }]}>
         <View
           style={[
             styles.modalContent,
             { backgroundColor: theme.colors.surface },
           ]}
         >
-          <View style={styles.modalHeader}>
+          <View style={[styles.modalHeader, { borderBottomColor: theme.colors.border }]}>
             <Text
-              style={[styles.modalTitle, { color: theme.colors.onSurface }]}
+              style={[styles.modalTitle, { color: theme.colors.text }]}
             >
               Add Payment Method
             </Text>
@@ -615,7 +616,7 @@ export function AddPaymentMethod({
           </ScrollView>
 
           {/* Submit Button */}
-          <View style={styles.buttonContainer}>
+          <View style={[styles.buttonContainer, { borderTopColor: theme.colors.border }]}>
             <Button
               mode="contained"
               onPress={handleSubmit}
@@ -636,7 +637,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
     borderTopLeftRadius: 16,
@@ -649,7 +649,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
   },
   modalTitle: {
     fontSize: 18,
@@ -767,7 +766,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
   },
   submitButton: {
     width: "100%",
