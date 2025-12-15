@@ -4,7 +4,7 @@ import { Text, FAB, ActivityIndicator, useTheme, Searchbar } from "react-native-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRadiusUsers, useDeleteRadiusUser } from "@/hooks/useRadiusUsers";
 import { RadiusUserCard } from "@/components/wiwebb/RadiusUserCard";
-import Toast from "react-native-toast-message";
+import { toast } from "@/components/ToastProvider";
 
 /**
  * RADIUS Users Screen
@@ -24,17 +24,9 @@ export default function RadiusUsersScreen() {
   const handleDelete = async (id: number, username: string) => {
     try {
       await deleteUser.mutateAsync(id);
-      Toast.show({
-        type: 'success',
-        text1: 'User Deleted',
-        text2: `${username} has been removed`,
-      });
+      toast.success('User Deleted', `${username} has been removed`);
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Delete Failed',
-        text2: error instanceof Error ? error.message : 'Unknown error',
-      });
+      toast.error('Delete Failed', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 
@@ -118,11 +110,7 @@ export default function RadiusUsersScreen() {
         icon="plus"
         style={[styles.fab, { backgroundColor: theme.colors.primary }]}
         onPress={() => {
-          Toast.show({
-            type: 'info',
-            text1: 'Coming Soon',
-            text2: 'Add user functionality will be implemented',
-          });
+          toast.info('Coming Soon', 'Add user functionality will be implemented');
         }}
       />
     </SafeAreaView>

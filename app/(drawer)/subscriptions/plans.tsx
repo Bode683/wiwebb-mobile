@@ -4,7 +4,7 @@ import { Text, ActivityIndicator, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { usePlans, useSubscriptionStatus, useSubscribe } from "@/hooks/useSubscriptions";
 import { PlanCard } from "@/components/wiwebb/PlanCard";
-import Toast from "react-native-toast-message";
+import { toast } from "@/components/ToastProvider";
 
 /**
  * Subscription Plans Screen
@@ -20,17 +20,9 @@ export default function PlansScreen() {
   const handleSubscribe = async (planId: number, planName: string) => {
     try {
       await subscribe.mutateAsync({ planId });
-      Toast.show({
-        type: 'success',
-        text1: 'Subscription Successful',
-        text2: `You are now subscribed to ${planName}`,
-      });
+      toast.success('Subscription Successful', `You are now subscribed to ${planName}`);
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Subscription Failed',
-        text2: error instanceof Error ? error.message : 'Unknown error',
-      });
+      toast.error('Subscription Failed', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 

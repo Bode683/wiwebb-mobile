@@ -1,5 +1,5 @@
 import type { Profile } from "@/api/types";
-import { showToast } from "@/components/ToastProvider";
+import { toast, toastMessages } from "@/components/ToastProvider";
 import { ThemedText } from "@/components/themed-text";
 import { useTheme } from "@/hooks/use-theme";
 import { useCurrentProfile } from "@/hooks/useProfile";
@@ -120,14 +120,14 @@ export default function Avatar({
       if (useCamera) {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
-          showToast("error", "Camera permission is required");
+          toast.error("Permission Required", "Camera permission is required");
           return;
         }
       } else {
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
-          showToast("error", "Media library permission is required");
+          toast.error("Permission Required", "Media library permission is required");
           return;
         }
       }
@@ -179,12 +179,10 @@ export default function Avatar({
 
       // Notify parent component
       onUpload(filePath);
-      showToast("success", "Avatar updated successfully");
+      toastMessages.auth.avatarUpdated();
     } catch (error) {
       console.error("Error uploading avatar:", error);
-      if (error instanceof Error) {
-        showToast("error", "Upload failed", error.message);
-      }
+      toast.error("Upload Failed", error instanceof Error ? error.message : "Failed to upload avatar");
     } finally {
       setIsLoading(false);
     }
@@ -220,12 +218,10 @@ export default function Avatar({
 
       onUpload("");
       setAvatarUrl(null);
-      showToast("success", "Avatar removed successfully");
+      toast.success("Avatar Removed", "Avatar removed successfully");
     } catch (error) {
       console.error("Error removing avatar:", error);
-      if (error instanceof Error) {
-        showToast("error", "Failed to remove avatar", error.message);
-      }
+      toast.error("Failed to Remove Avatar", error instanceof Error ? error.message : "Failed to remove avatar");
     }
   }
 
