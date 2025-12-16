@@ -1,5 +1,5 @@
 import { AppBar } from "@/components/app-bar";
-import { Drawer } from "@/components/drawer";
+import { Drawer } from "@/features/drawer";
 import { useApi } from "@/context/ApiContext";
 import { useCurrentProfile } from "@/hooks/useProfile";
 import { Stack } from "expo-router";
